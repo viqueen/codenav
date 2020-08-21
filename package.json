@@ -1,0 +1,22 @@
+{
+  "name": "codenav",
+  "version": "1.0.0",
+  "description": "code navigation",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viqueen/codenav.git"
+  },
+  "keywords": [
+    "code",
+    "navigation"
+  ],
+  "author": "Hasnae R.",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/viqueen/codenav/issues"
+  },
+  "homepage": "https://github.com/viqueen/codenav#readme"
+}
