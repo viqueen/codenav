@@ -2,8 +2,12 @@
   "name": "codenav",
   "version": "1.0.0",
   "description": "code navigation",
-  "main": "index.js",
+  "bin": {
+    "cnav": "./cli/bin/cnav"
+  },
   "scripts": {
+    "pretty:check": "prettier --check .",
+    "pretty": "prettier --check --write ."
   },
   "repository": {
     "type": "git",
@@ -18,5 +22,17 @@
   "bugs": {
     "url": "https://github.com/viqueen/codenav/issues"
   },
-  "homepage": "https://github.com/viqueen/codenav#readme"
+  "homepage": "https://github.com/viqueen/codenav#readme",
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "prettier": "^2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pretty:check"
+    }
+  },
+  "dependencies": {
+    "commander": "^6.0.0"
+  }
 }
