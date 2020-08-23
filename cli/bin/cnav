@@ -1,6 +1,23 @@
 #!/usr/bin/env node
 
 const program = require('commander');
+const Store = require('../lib/store');
+
+const codeNavStore = new Store({
+    path: './.cnav-db'
+});
+
+program.command('register <sshUrlConnection>')
+    .description('registers a new repo using its ssh url connection')
+    .action((sshUrlConnection) => {
+        codeNavStore.register(sshUrlConnection);
+    });
+
+program.command('list')
+    .description('lists registered repos')
+    .action(() => {
+        codeNavStore.list();
+    });
 
 program.version('1.0.0');
 program.parse(process.argv);
