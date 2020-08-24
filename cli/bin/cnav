@@ -19,5 +19,25 @@ program.command('list')
         codeNavStore.list();
     });
 
+// configuration handlers
+
+program.command('config')
+    .description('displays cnav configuration')
+    .action(() => {
+        console.log(codeNavConfig.config());
+    });
+
+program.command('set-config <key> <value>')
+    .description('updates cnav configuration entry')
+    .action((key, value) => {
+        codeNavConfig.set(key, value);
+    });
+
+program.command('get-config <key>')
+    .description('gets cnav configuration entry')
+    .action((key) => {
+        console.log(codeNavConfig.get(key));
+    });
+
 program.version('1.0.0');
 program.parse(process.argv);

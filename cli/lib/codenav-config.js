@@ -21,6 +21,21 @@ class CodeNavConfig {
     directory() {
         return this.configDirectory;
     }
+
+    set(key, value) {
+        const config = JSON.parse(fs.readFileSync(this.configFile).toString());
+        config[key] = value;
+        fs.writeFileSync(this.configFile, JSON.stringify(config));
+    }
+
+    get(key) {
+        const config = JSON.parse(fs.readFileSync(this.configFile).toString());
+        return config[key];
+    }
+
+    config() {
+        return JSON.parse(fs.readFileSync(this.configFile).toString());
+    }
 }
 
 module.exports = CodeNavConfig;
