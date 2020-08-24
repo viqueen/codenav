@@ -1,11 +1,11 @@
+const path = require('path');
 const LevelStore = require('./level-store');
 const SshUrl = require('./ssh-url');
 
 class CodeNavStore {
-    constructor() {
+    constructor(config) {
         this.store = new LevelStore({
-            // TODO : use user home instead
-            path: './.cnav-db',
+            path: path.resolve(config.directory(), 'db'),
             indexes: ['name'],
         });
     }
