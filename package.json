@@ -4,7 +4,8 @@
   "description": "code navigation",
   "bin": {
     "cnav": "./cli/bin/cnav",
-    "cnav-github": "./cli/bin/cnav-github"
+    "cnav-github": "./cli/bin/cnav-github",
+    "cnav-bitbucket": "./cli/bin/cnav-bitbucket"
   },
   "scripts": {
     "pretty:check": "prettier --check .",
