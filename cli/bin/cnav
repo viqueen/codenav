@@ -22,6 +22,17 @@ program.command('list')
         });
     });
 
+program.command('clone')
+    .description('clone registered repos')
+    .option('-h, --host <name>', 'filter by host', '*')
+    .option('-ns, --namespace <namespace>', 'filter by namespace', '*')
+    .action((options) => {
+        codeNavStore.clone({
+            host: options.host,
+            namespace: options.namespace
+        });
+    });
+
 // configuration handlers
 
 program.command('config')

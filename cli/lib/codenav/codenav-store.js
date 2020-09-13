@@ -1,6 +1,7 @@
 const path = require('path');
 const LevelStore = require('../util/level-store');
 const SshUrl = require('../util/ssh-url');
+const CloneCmd = require('../cmd/clone-cmd');
 
 class CodeNavStore {
     constructor(config) {
@@ -8,6 +9,7 @@ class CodeNavStore {
             path: path.resolve(config.directory(), 'db'),
             indexes: ['name', 'namespace', 'host'],
         });
+        this.cloneCmd = new CloneCmd(config.get('sources.root'));
     }
 
     register(sshUrlConnection) {
@@ -27,14 +29,23 @@ class CodeNavStore {
         });
     }
 
-    list(filters) {
-        const predicates = Object.entries(filters).map((e) => {
+    _predicates(filters) {
+        return Object.entries(filters).map((e) => {
             if (e[1] === '*') {
                 return () => true;
             }
             return (item) => item[e[0]] === e[1];
         });
-        this.store.list(predicates);
+    }
+
+    list(filters) {
+        this.store.list(this._predicates(filters), console.log);
+    }
+
+    clone(filters) {
+        this.store.list(this._predicates(filters), (item) => {
+            this.cloneCmd.process(item);
+        });
     }
 }
 

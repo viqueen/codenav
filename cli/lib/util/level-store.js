@@ -19,12 +19,6 @@ class LevelStore {
             .then((value) => JSON.parse(value.toString()));
     }
 
-    getBy(fieldName, fieldValue) {
-        return this.indexDB[fieldName]
-            .get(fieldValue)
-            .then((ID) => this.get(ID));
-    }
-
     put(key, value) {
         const updates = this.indexes.map((index) => {
             this.indexDB[index].put(value[index], value['ID']);
@@ -33,11 +27,11 @@ class LevelStore {
         return Promise.all(updates);
     }
 
-    list(predicates) {
+    list(predicates, callback) {
         return this.mainDB.createReadStream().on('data', (data) => {
             const item = JSON.parse(data.value.toString());
             if (predicates.every((p) => p(item))) {
-                console.log(item);
+                callback(item);
             }
         });
     }
