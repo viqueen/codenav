@@ -33,9 +33,12 @@ class LevelStore {
         return Promise.all(updates);
     }
 
-    list() {
+    list(predicates) {
         return this.mainDB.createReadStream().on('data', (data) => {
-            console.log(JSON.parse(data.value.toString()));
+            const item = JSON.parse(data.value.toString());
+            if (predicates.every((p) => p(item))) {
+                console.log(item);
+            }
         });
     }
 }

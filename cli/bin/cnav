@@ -15,8 +15,11 @@ program.command('register <sshUrlConnection>')
 
 program.command('list')
     .description('lists registered repos')
-    .action(() => {
-        codeNavStore.list();
+    .option('-h, --host <name>', 'filter by host', '*')
+    .action((options) => {
+        codeNavStore.list({
+            host: options.host
+        });
     });
 
 // configuration handlers

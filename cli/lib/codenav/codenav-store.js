@@ -27,8 +27,14 @@ class CodeNavStore {
         });
     }
 
-    list() {
-        this.store.list();
+    list(filters) {
+        const predicates = Object.entries(filters).map((e) => {
+            if (e[1] === '*') {
+                return () => true;
+            }
+            return (item) => item[e[0]] === e[1];
+        });
+        this.store.list(predicates);
     }
 }
 
