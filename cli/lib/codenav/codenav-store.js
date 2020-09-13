@@ -1,6 +1,6 @@
 const path = require('path');
-const LevelStore = require('./level-store');
-const SshUrl = require('./ssh-url');
+const LevelStore = require('../util/level-store');
+const SshUrl = require('../util/ssh-url');
 
 class CodeNavStore {
     constructor(config) {

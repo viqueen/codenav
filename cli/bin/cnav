@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const CodeNavConfig = require('../lib/codenav-config');
-const CodeNavStore = require('../lib/codenav-store');
+const CodeNavConfig = require('../lib/codenav/codenav-config');
+const CodeNavStore = require('../lib/codenav/codenav-store');
 
 const codeNavConfig = new CodeNavConfig();
 const codeNavStore = new CodeNavStore(codeNavConfig);
