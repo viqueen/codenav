@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "code navigation",
   "bin": {
-    "cnav": "./cli/bin/cnav"
+    "cnav": "./cli/bin/cnav",
+    "cnav-github": "./cli/bin/cnav-github"
   },
   "scripts": {
     "pretty:check": "prettier --check .",
