@@ -6,7 +6,7 @@ class CodeNavStore {
     constructor(config) {
         this.store = new LevelStore({
             path: path.resolve(config.directory(), 'db'),
-            indexes: ['name', 'namespace'],
+            indexes: ['name', 'namespace', 'host'],
         });
     }
 
@@ -23,6 +23,7 @@ class CodeNavStore {
             connection: sshUrlConnection,
             namespace: parsed.namespace,
             name: parsed.name,
+            host: parsed.host,
         });
     }
 
