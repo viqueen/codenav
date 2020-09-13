@@ -6,7 +6,7 @@ class CodeNavStore {
     constructor(config) {
         this.store = new LevelStore({
             path: path.resolve(config.directory(), 'db'),
-            indexes: ['name'],
+            indexes: ['name', 'namespace'],
         });
     }
 
