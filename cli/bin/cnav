@@ -16,9 +16,11 @@ program.command('register <sshUrlConnection>')
 program.command('list')
     .description('lists registered repos')
     .option('-h, --host <name>', 'filter by host', '*')
+    .option('-ns, --namespace <namespace>', 'filter by namespace', '*')
     .action((options) => {
         codeNavStore.list({
-            host: options.host
+            host: options.host,
+            namespace: options.namespace
         });
     });
 
