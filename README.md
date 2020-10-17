@@ -1,5 +1,7 @@
 ## Code Navigation
 
+![codenav Package](https://github.com/viqueen/codenav/workflows/codenav%20Package/badge.svg)
+
 ### install it
 
 #### from stable
