@@ -1,6 +1,6 @@
 {
   "name": "@viqueen/codenav",
-  "version": "1.0.0-m02",
+  "version": "1.0.0-m03",
   "description": "code navigation",
   "bin": {
     "cnav": "./cli/bin/cnav",
