@@ -72,21 +72,24 @@ program.command('go <alias>')
 
 program.command('github <namespace>')
     .description('register repos from github with given namespace')
-    .action((namespace) => {
+    .option('-p, --protocol <protocol>', 'url connection protocol', 'ssh')
+    .action((namespace, options) => {
         const githubClient = new RestClient({
             host: 'api.github.com'
         });
+        const urlKey = options.protocol !== 'ssh' ? 'clone_url' : 'ssh_url';
         // TODO : handle pagination
         githubClient.get(`/users/${namespace}/repos`)
             .then(json => {
-                json.forEach(item => codeNavStore.register(item.ssh_url));
+                json.forEach(item => codeNavStore.register(item[urlKey]));
             })
             .catch(error => console.log);
     });
 
 program.command('bitbucket <namespace>')
     .description('register repos from bitbucket with given namespace')
-    .action((namespace) => {
+    .option('-p, --protocol <protocol>', 'url connection protocol', 'ssh')
+    .action((namespace, options) => {
         const bitbucketClient = new RestClient({
             host: 'api.bitbucket.org'
         });
@@ -95,7 +98,7 @@ program.command('bitbucket <namespace>')
             .then(json => {
                 json.values
                     .flatMap(item => item.links.clone)
-                    .filter(item => item.name === 'ssh')
+                    .filter(item => item.name === options.protocol)
                     .forEach(item => codeNavStore.register(item.href));
             })
             .catch(error => console.log);

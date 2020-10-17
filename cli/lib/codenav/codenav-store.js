@@ -1,6 +1,6 @@
 const path = require('path');
 const LevelStore = require('../util/level-store');
-const SshUrl = require('../util/ssh-url');
+const ConnectionUrl = require('../util/connection-url');
 const CloneCmd = require('../cmd/clone-cmd');
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -16,8 +16,8 @@ class CodeNavStore {
         this.cloneCmd = new CloneCmd(this.sourcesRoot);
     }
 
-    register(sshUrlConnection) {
-        const parsed = SshUrl.parse(sshUrlConnection);
+    register(urlConnection) {
+        const parsed = ConnectionUrl.parse(urlConnection);
         if (!parsed) {
             // TODO : handle error / warning
             return;
@@ -26,7 +26,7 @@ class CodeNavStore {
         const ID = [parsed.namespace, parsed.name].join('/');
         return this.store.put(ID, {
             ID: ID,
-            connection: sshUrlConnection,
+            connection: urlConnection,
             namespace: parsed.namespace,
             name: parsed.name,
             host: parsed.host,
@@ -57,7 +57,7 @@ class CodeNavStore {
             if (dispaly.location) {
                 const target = this._location(item);
                 if (fs.existsSync(target)) {
-                    console.log(this._location(item));
+                    console.log(target);
                 }
             } else {
                 console.log(item);
@@ -74,7 +74,7 @@ class CodeNavStore {
     goto(filters) {
         this.store.list(this._predicates(filters), (item) => {
             const target = this._location(item);
-            if (!fs.existsSync(item)) {
+            if (!fs.existsSync(target)) {
                 console.log(
                     `${item.namespace}/${item.name} is not checked out`
                 );
