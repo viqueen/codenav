@@ -55,5 +55,13 @@ program.command('get-config <key>')
         console.log(codeNavConfig.get(key));
     });
 
+program.command('go <alias>')
+    .description('go to repo directory')
+    .action((alias) => {
+        const targets = codeNavStore.goto({
+            name: alias
+        });
+    });
+
 program.version('1.0.0');
 program.parse(process.argv);

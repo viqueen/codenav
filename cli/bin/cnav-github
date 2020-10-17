@@ -10,7 +10,7 @@ _with_arguments() {
 }
 
 function register() {
-    _with_arguments 1 $@
+    _with_arguments 1 "$@"
     username=${1}; shift
 
     # TODO : handle paging
@@ -21,9 +21,9 @@ function register() {
         )
     )
 
-    for item in ${items[@]};
+    for item in "${items[@]}";
     do
-        cnav register ${item}
+        cnav register "${item}"
     done
 }
 

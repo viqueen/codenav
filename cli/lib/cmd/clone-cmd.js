@@ -1,6 +1,7 @@
 const TaskExecutor = require('../util/task-executor');
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 class CloneCmd {
     constructor(sourcesRoot) {
@@ -11,17 +12,17 @@ class CloneCmd {
     process(repo) {
         const runnable = () =>
             new Promise((resolve) => {
-                console.log(`processing : ${repo.connection}`);
-                const _clone = spawn('git', [
-                    'clone',
-                    repo.connection,
-                    path.join(
-                        this.sourcesRoot,
-                        repo.host,
-                        repo.namespace,
-                        repo.name
-                    ),
-                ]);
+                const target = path.join(
+                    this.sourcesRoot,
+                    repo.host,
+                    repo.namespace,
+                    repo.name
+                );
+                if (fs.existsSync(target)) {
+                    resolve();
+                    return;
+                }
+                const _clone = spawn('git', ['clone', repo.connection, target]);
                 _clone.stderr.on('data', (data) => {
                     console.log(data.toString());
                 });
