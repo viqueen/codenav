@@ -74,6 +74,7 @@ cnav-github register <username|org>
 <details>
 <summary>usage</summary>
 <p>
+
 ```
 Usage: cnav list [options]
 
@@ -83,8 +84,8 @@ Options:
 -h, --host <name> filter by host (default: "_")
 -ns, --namespace <namespace> filter by namespace (default: "_")
 -l, --location display checkout location only (default: false)
+```
 
-````
 </p>
 </details>
 
@@ -93,13 +94,14 @@ cnav list
 cnav list -ns <username|org>
 cnav list -h <github.com|bitbucket.org>
 cnav list -ns <username|org> -h <github.com|bitbucket.org>
-````
+```
 
 - clone repos
 
 <details>
 <summary>usage</summary>
 <p>
+
 ```
 Usage: cnav clone [options]
 
@@ -108,8 +110,8 @@ clone registered repos
 Options:
 -h, --host <name> filter by host (default: "_")
 -ns, --namespace <namespace> filter by namespace (default: "_")
+```
 
-````
 </p>
 </details>
 
@@ -118,7 +120,7 @@ cnav clone
 cnav clone -ns <username|org>
 cnav clone -h <github.com|bitbucket.org>
 cnav clone -ns <username|org> -h <github.com|bitbucket.org>
-````
+```
 
 - navigate to repo
 
