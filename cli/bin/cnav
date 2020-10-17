@@ -17,11 +17,17 @@ program.command('list')
     .description('lists registered repos')
     .option('-h, --host <name>', 'filter by host', '*')
     .option('-ns, --namespace <namespace>', 'filter by namespace', '*')
+    .option('-l, --location', 'display checkout location only', false)
     .action((options) => {
-        codeNavStore.list({
-            host: options.host,
-            namespace: options.namespace
-        });
+        codeNavStore.list(
+            {
+                host: options.host,
+                namespace: options.namespace
+            },
+            {
+                location: options.location
+            }
+        );
     });
 
 program.command('clone')

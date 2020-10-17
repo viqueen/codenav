@@ -32,6 +32,16 @@ class CodeNavStore {
         });
     }
 
+    _location(item) {
+        const target = path.join(
+            this.sourcesRoot,
+            item.host,
+            item.namespace,
+            item.name
+        );
+        return target;
+    }
+
     _predicates(filters) {
         return Object.entries(filters).map((e) => {
             if (e[1] === '*') {
@@ -41,8 +51,14 @@ class CodeNavStore {
         });
     }
 
-    list(filters) {
-        this.store.list(this._predicates(filters), console.log);
+    list(filters, dispaly) {
+        this.store.list(this._predicates(filters), (item) => {
+            if (dispaly.location) {
+                console.log(this._location(item));
+            } else {
+                console.log(item);
+            }
+        });
     }
 
     clone(filters) {
@@ -53,12 +69,7 @@ class CodeNavStore {
 
     goto(filters) {
         this.store.list(this._predicates(filters), (item) => {
-            const target = path.join(
-                this.sourcesRoot,
-                item.host,
-                item.namespace,
-                item.name
-            );
+            const target = this._location(item);
             spawn(this.shellCmd, ['-i'], {
                 cwd: target,
                 stdio: 'inherit',
