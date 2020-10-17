@@ -3,6 +3,7 @@ const LevelStore = require('../util/level-store');
 const SshUrl = require('../util/ssh-url');
 const CloneCmd = require('../cmd/clone-cmd');
 const { spawn } = require('child_process');
+const fs = require('fs');
 
 class CodeNavStore {
     constructor(config) {
@@ -54,7 +55,10 @@ class CodeNavStore {
     list(filters, dispaly) {
         this.store.list(this._predicates(filters), (item) => {
             if (dispaly.location) {
-                console.log(this._location(item));
+                const target = this._location(item);
+                if (fs.existsSync(target)) {
+                    console.log(this._location(item));
+                }
             } else {
                 console.log(item);
             }
@@ -70,6 +74,12 @@ class CodeNavStore {
     goto(filters) {
         this.store.list(this._predicates(filters), (item) => {
             const target = this._location(item);
+            if (!fs.existsSync(item)) {
+                console.log(
+                    `${item.namespace}/${item.name} is not checked out`
+                );
+                return;
+            }
             spawn(this.shellCmd, ['-i'], {
                 cwd: target,
                 stdio: 'inherit',
