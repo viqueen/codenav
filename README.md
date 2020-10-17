@@ -54,19 +54,21 @@ Commands:
   set-config <key> <value>     updates cnav configuration entry
   get-config <key>             gets cnav configuration entry
   go <alias>                   go to repo directory
+  github <namespace>           register repos from github with given namespace
+  bitbucket <namespace>        register repos from bitbucket with given namespace
   help [command]               display help for command
 ```
 
-- cnav-bitbucket
+- register repos from bitbucket
 
 ```
-cnav-bitbucket register <username|org>
+cnav bitbucket <username|org>
 ```
 
-- cnav-github
+- register repos from github
 
 ```
-cnav-github register <username|org>
+cnav github <username|org>
 ```
 
 - list repos

@@ -3,6 +3,7 @@
 const program = require('commander');
 const CodeNavConfig = require('../lib/codenav/codenav-config');
 const CodeNavStore = require('../lib/codenav/codenav-store');
+const RestClient = require('../lib/util/rest-client');
 
 const codeNavConfig = new CodeNavConfig();
 const codeNavStore = new CodeNavStore(codeNavConfig);
@@ -68,6 +69,37 @@ program.command('go <alias>')
             name: alias
         });
     });
+
+program.command('github <namespace>')
+    .description('register repos from github with given namespace')
+    .action((namespace) => {
+        const githubClient = new RestClient({
+            host: 'api.github.com'
+        });
+        // TODO : handle pagination
+        githubClient.get(`/users/${namespace}/repos`)
+            .then(json => {
+                json.forEach(item => codeNavStore.register(item.ssh_url));
+            })
+            .catch(error => console.log);
+    });
+
+program.command('bitbucket <namespace>')
+    .description('register repos from bitbucket with given namespace')
+    .action((namespace) => {
+        const bitbucketClient = new RestClient({
+            host: 'api.bitbucket.org'
+        });
+        // TODO : handle pagination
+        bitbucketClient.get(`/2.0/repositories/${namespace}`)
+            .then(json => {
+                json.values
+                    .flatMap(item => item.links.clone)
+                    .filter(item => item.name === 'ssh')
+                    .forEach(item => codeNavStore.register(item.href));
+            })
+            .catch(error => console.log);
+    })
 
 program.version('1.0.0');
 program.parse(process.argv);
