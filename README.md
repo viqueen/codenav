@@ -1,6 +1,7 @@
 ## Code Navigation
 
 ![codenav Package](https://github.com/viqueen/codenav/workflows/codenav%20Package/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=viqueen_codenav&metric=alert_status)](https://sonarcloud.io/dashboard?id=viqueen_codenav)
 
 ### install it
 
