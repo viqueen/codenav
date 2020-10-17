@@ -10,6 +10,7 @@ class CodeNavConfig {
         if (!fs.existsSync(this.configFile)) {
             const defaultConfiguration = {
                 'sources.root': path.resolve(os.homedir(), 'sources'),
+                'shell.cmd': 'bash',
             };
             fs.writeFileSync(
                 this.configFile,
