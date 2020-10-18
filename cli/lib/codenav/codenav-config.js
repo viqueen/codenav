@@ -11,6 +11,7 @@ class CodeNavConfig {
             const defaultConfiguration = {
                 'sources.root': path.resolve(os.homedir(), 'sources'),
                 'shell.cmd': 'bash',
+                'cnav.scope': '<all>',
             };
             fs.writeFileSync(
                 this.configFile,

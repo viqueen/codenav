@@ -16,14 +16,16 @@ program.command('register <sshUrlConnection>')
 
 program.command('list')
     .description('lists registered repos')
-    .option('-h, --host <name>', 'filter by host', '*')
-    .option('-ns, --namespace <namespace>', 'filter by namespace', '*')
+    .option('-h, --host <name>', 'filter by host', '<all>')
+    .option('-ns, --namespace <namespace>', 'filter by namespace', '<all>')
+    .option('-s, --scope <scope>', 'filter by scope', '<all>')
     .option('-l, --location', 'display checkout location only', false)
     .action((options) => {
         codeNavStore.list(
             {
                 host: options.host,
-                namespace: options.namespace
+                namespace: options.namespace,
+                scope: options.scope
             },
             {
                 location: options.location
@@ -33,12 +35,14 @@ program.command('list')
 
 program.command('clone')
     .description('clone registered repos')
-    .option('-h, --host <name>', 'filter by host', '*')
-    .option('-ns, --namespace <namespace>', 'filter by namespace', '*')
+    .option('-h, --host <name>', 'filter by host', '<all>')
+    .option('-ns, --namespace <namespace>', 'filter by namespace', '<all>')
+    .option('-s, --scope <scope>', 'filter by scope', '<all>')
     .action((options) => {
         codeNavStore.clone({
             host: options.host,
-            namespace: options.namespace
+            namespace: options.namespace,
+            scope: options.scope
         });
     });
 

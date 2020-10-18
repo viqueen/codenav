@@ -4,13 +4,6 @@ const levelDown = require('leveldown');
 class LevelStore {
     constructor(options) {
         this.mainDB = levelUp(levelDown(`${options.path}-main`));
-        this.indexDB = {};
-        this.indexes = options.indexes || [];
-        this.indexes.forEach((index) => {
-            this.indexDB[index] = levelUp(
-                levelDown(`${options.path}-${index}`)
-            );
-        });
     }
 
     get(key) {
@@ -20,11 +13,7 @@ class LevelStore {
     }
 
     put(key, value) {
-        const updates = this.indexes.map((index) => {
-            this.indexDB[index].put(value[index], value['ID']);
-        });
-        updates.push(this.mainDB.put(key, JSON.stringify(value)));
-        return Promise.all(updates);
+        return this.mainDB.put(key, JSON.stringify(value));
     }
 
     list(predicates, callback) {
