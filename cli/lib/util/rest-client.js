@@ -1,18 +1,29 @@
 const https = require('https');
+const http = require('http');
+
+const client = {
+    http: http,
+    https: https,
+};
 
 class RestClient {
     constructor(options) {
         this.host = options.host;
+        this.port = options.port;
+        // TODO : validate scheme
+        this.protocol = options.protocol || 'https';
+        this.headers = options.headers || {};
     }
 
     _sendRequest(requestConfig) {
         return new Promise((resolve) => {
             const settings = Object.assign({}, requestConfig, {
                 host: this.host,
-                headers: {
+                port: this.port,
+                headers: Object.assign({}, this.headers, {
                     'User-Agent': 'code-navigation',
                     'Content-Type': 'application/json',
-                },
+                }),
             });
             const callback = (response) => {
                 let buffer = '';
@@ -25,7 +36,7 @@ class RestClient {
                     }
                 });
             };
-            const request = https.request(settings, callback);
+            const request = client[this.protocol].request(settings, callback);
             request.end();
         });
     }

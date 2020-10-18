@@ -13,6 +13,7 @@ class CodeNavStore {
         });
         this.sourcesRoot = config.get('sources.root');
         this.shellCmd = config.get('shell.cmd');
+        this.scope = config.get('cnav.scope');
         this.cloneCmd = new CloneCmd(this.sourcesRoot);
     }
 
@@ -22,7 +23,7 @@ class CodeNavStore {
             // TODO : handle error / warning
             return;
         }
-
+        console.log(`registering : ${urlConnection}`);
         const ID = [parsed.namespace, parsed.name].join('/');
         return this.store.put(ID, {
             ID: ID,
@@ -30,6 +31,7 @@ class CodeNavStore {
             namespace: parsed.namespace,
             name: parsed.name,
             host: parsed.host,
+            scope: this.scope,
         });
     }
 
@@ -45,10 +47,10 @@ class CodeNavStore {
 
     _predicates(filters) {
         return Object.entries(filters).map((e) => {
-            if (e[1] === '*') {
+            if (e[1] === '<all>') {
                 return () => true;
             }
-            return (item) => item[e[0]] === e[1];
+            return (item) => item[e[0]].startsWith(e[1]);
         });
     }
 
