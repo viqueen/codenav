@@ -1,11 +1,9 @@
 {
   "name": "codenav",
-  "version": "1.0.0-m07",
+  "version": "1.0.0",
   "description": "code navigation",
   "bin": {
-    "cnav": "./cli/bin/cnav",
-    "cnav-github": "./cli/bin/cnav-github",
-    "cnav-bitbucket": "./cli/bin/cnav-bitbucket"
+    "cnav": "./cli/bin/cnav"
   },
   "scripts": {
     "pretty:check": "prettier --check .",
