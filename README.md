@@ -1,6 +1,5 @@
 ## Code Navigation
 
-![codenav Package](https://github.com/viqueen/codenav/workflows/codenav%20Package/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=viqueen_codenav&metric=alert_status)](https://sonarcloud.io/dashboard?id=viqueen_codenav)
 
 ### install it
@@ -47,22 +46,29 @@ Options:
   -h, --help                   display help for command
 
 Commands:
-  register <sshUrlConnection>  registers a new repo using its ssh url connection
-  list [options]               lists registered repos
-  clone [options]              clone registered repos
-  config                       displays cnav configuration
-  set-config <key> <value>     updates cnav configuration entry
-  get-config <key>             gets cnav configuration entry
-  go <alias>                   go to repo directory
-  github <namespace>           register repos from github with given namespace
-  bitbucket <namespace>        register repos from bitbucket with given namespace
-  help [command]               display help for command
+  register <urlConnection>         registers a new repo using its url connection
+  list [options]                   lists registered repos
+  clone [options]                  clone registered repos
+  config                           displays cnav configuration
+  set-config <key> <value>         updates cnav configuration entry
+  get-config <key>                 gets cnav configuration entry
+  go <alias>                       go to repo directory
+  github [options] <namespace>     register repos from github with given namespace
+  bitbucket [options] <namespace>  register repos from bitbucket with given namespace
+  stash [options] <project>        register repos from bitbucket dc for a given project
+  help [command]                   display help for command
 ```
 
 - register repos from bitbucket
 
 ```
 cnav bitbucket <username|org>
+```
+
+- register repos from bitbucket server
+
+```
+cnav stash <projectKey>
 ```
 
 - register repos from github
@@ -83,9 +89,10 @@ Usage: cnav list [options]
 lists registered repos
 
 Options:
--h, --host <name> filter by host (default: "_")
--ns, --namespace <namespace> filter by namespace (default: "_")
--l, --location display checkout location only (default: false)
+  -h, --host <host>             filter by host (default: "<all>")
+  -ns, --namespace <namespace>  filter by namespace (default: "<all>")
+  -s, --scope <scope>           filter by scope (default: "<all>")
+  -l, --location                display checkout location only (default: false)
 ```
 
 </p>
@@ -110,8 +117,9 @@ Usage: cnav clone [options]
 clone registered repos
 
 Options:
--h, --host <name> filter by host (default: "_")
--ns, --namespace <namespace> filter by namespace (default: "_")
+  -h, --host <host>             filter by host (default: "<all>")
+  -ns, --namespace <namespace>  filter by namespace (default: "<all>")
+  -s, --scope <scope>           filter by scope (default: "<all>")
 ```
 
 </p>
