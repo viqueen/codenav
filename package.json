@@ -1,6 +1,6 @@
 {
   "name": "codenav",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "code navigation",
   "bin": {
     "cnav": "./cli/bin/cnav"

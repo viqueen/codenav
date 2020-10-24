@@ -4,20 +4,15 @@ const path = require('path');
 const fs = require('fs');
 
 class CloneCmd {
-    constructor(sourcesRoot) {
+    constructor(codeNavRepo) {
         this.taskExecutor = new TaskExecutor({});
-        this.sourcesRoot = sourcesRoot;
+        this.codeNavRepo = codeNavRepo;
     }
 
     process(repo) {
         const runnable = () =>
             new Promise((resolve) => {
-                const target = path.join(
-                    this.sourcesRoot,
-                    repo.host,
-                    repo.namespace,
-                    repo.name
-                );
+                const target = this.codeNavRepo.location(repo);
                 if (fs.existsSync(target)) {
                     resolve();
                     return;
