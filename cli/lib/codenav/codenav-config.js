@@ -3,8 +3,8 @@ const path = require('path');
 const fs = require('fs');
 
 class CodeNavConfig {
-    constructor() {
-        this.configDirectory = path.resolve(os.homedir(), '.cnav');
+    constructor(directory) {
+        this.configDirectory = directory || path.resolve(os.homedir(), '.cnav');
         fs.mkdirSync(this.configDirectory, { recursive: true });
         this.configFile = path.resolve(this.configDirectory, 'config.json');
         if (!fs.existsSync(this.configFile)) {
