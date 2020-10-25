@@ -30,7 +30,7 @@ class CodeNavStore {
             ID: ID,
             connection: urlConnection,
             namespace: parsed.namespace,
-            name: parsed.name,
+            alias: parsed.name,
             host: parsed.host,
             scope: this.scope,
         });
@@ -41,13 +41,13 @@ class CodeNavStore {
             if (e[1] === '<all>') {
                 return () => true;
             }
-            return (item) => item[e[0]].startsWith(e[1]);
+            return (item) => item[e[0]] === e[1];
         });
     }
 
-    list(filters, dispaly) {
+    list(filters, display) {
         this.store.list(this._predicates(filters), (item) => {
-            if (dispaly.location) {
+            if (display.location) {
                 const target = this.codeNavRepo.location(item);
                 if (fs.existsSync(target)) {
                     console.log(target);

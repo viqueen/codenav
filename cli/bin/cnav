@@ -22,12 +22,15 @@ program.command('list')
     .option('-ns, --namespace <namespace>', 'filter by namespace', '<all>')
     .option('-s, --scope <scope>', 'filter by scope', '<all>')
     .option('-l, --location', 'display checkout location only', false)
+    .option('-r, --repo <repo>', 'filter by repo', '<all>')
     .action((options) => {
+        // noinspection JSUnresolvedVariable
         codeNavStore.list(
             {
                 host: options.host,
                 namespace: options.namespace,
-                scope: options.scope
+                scope: options.scope,
+                alias: options.repo
             },
             {
                 location: options.location
@@ -66,16 +69,6 @@ program.command('get-config <key>')
     .description('gets cnav configuration entry')
     .action((key) => {
         console.log(codeNavConfig.get(key));
-    });
-
-// interact with repos
-
-program.command('go <alias>')
-    .description('go to repo directory')
-    .action((alias) => {
-        const targets = codeNavStore.goto({
-            name: alias
-        });
     });
 
 // git providers

@@ -12,10 +12,10 @@ class CodeNavRepo {
                 this.sourcesRoot,
                 repo.host,
                 repo.namespace,
-                repo.name
+                repo.alias
             );
         } else {
-            return path.join(this.sourcesRoot, this.scope, repo.name);
+            return path.join(this.sourcesRoot, this.scope, repo.alias);
         }
     }
 }

@@ -3,7 +3,8 @@
   "version": "1.1.0",
   "description": "code navigation",
   "bin": {
-    "cnav": "./cli/bin/cnav"
+    "cnav": "./cli/bin/cnav",
+    "goto": "./cli/bin/goto"
   },
   "scripts": {
     "pretty:check": "prettier --check .",
