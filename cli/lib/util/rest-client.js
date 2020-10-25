@@ -1,5 +1,6 @@
 const https = require('https');
 const http = require('http');
+const QueryString = require('query-string');
 
 const client = {
     http: http,
@@ -41,11 +42,15 @@ class RestClient {
         });
     }
 
-    get(path) {
-        return this._sendRequest({
-            path: path,
-            method: 'GET',
-        });
+    get(path, query) {
+        const finalQuery = query || {};
+        return this._sendRequest(
+            {
+                path: `${path}?${QueryString.stringify(finalQuery)}`,
+                method: 'GET',
+            },
+            query
+        );
     }
 }
 

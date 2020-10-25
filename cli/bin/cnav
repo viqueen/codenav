@@ -5,6 +5,7 @@ const CodeNavConfig = require('../lib/codenav/codenav-config');
 const CodeNavStore = require('../lib/codenav/codenav-store');
 const RestClient = require('../lib/util/rest-client');
 const UrlParser = require('../lib/util/url-parser');
+const StashRegisterCmd = require('../lib/cmd/stash-register-cmd');
 
 const codeNavConfig = new CodeNavConfig();
 const codeNavStore = new CodeNavStore(codeNavConfig);
@@ -135,22 +136,15 @@ program.command('stash <project>')
             console.log('invalid stash url ' + url);
             return;
         }
-        const stashClient = new RestClient({
-            protocol: urlParts.protocol,
-            host: urlParts.host,
-            port: urlParts.port,
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+
+        const stashRegisterCmd = new StashRegisterCmd({
+            urlParts: urlParts,
+            token: token,
+            project: project,
+            codeNavStore: codeNavStore,
+            protocol: options.protocol
         });
-        const context = urlParts.context === '/' ? '' : urlParts.context;
-        stashClient.get(`${context}/rest/api/1.0/projects/${project}/repos`)
-            .then(json => {
-                json.values
-                    .flatMap(item => item.links.clone)
-                    .filter(item => item.name === options.protocol)
-                    .forEach(item => codeNavStore.register(item.href))
-            });
+        stashRegisterCmd.execute();
     });
 
 program.version('1.0.0');
