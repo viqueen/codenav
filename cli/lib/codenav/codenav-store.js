@@ -58,25 +58,15 @@ class CodeNavStore {
         });
     }
 
-    clone(filters) {
+    remove(filters) {
         this.store.list(this._predicates(filters), (item) => {
-            this.cloneCmd.process(item);
+            this.store.del(item.ID);
         });
     }
 
-    goto(filters) {
+    clone(filters) {
         this.store.list(this._predicates(filters), (item) => {
-            const target = this.codeNavRepo.location(item);
-            if (!fs.existsSync(target)) {
-                console.log(
-                    `${item.namespace}/${item.name} is not checked out`
-                );
-                return;
-            }
-            spawn(this.shellCmd, ['-i'], {
-                cwd: target,
-                stdio: 'inherit',
-            });
+            this.cloneCmd.process(item);
         });
     }
 }

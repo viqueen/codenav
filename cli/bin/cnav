@@ -38,6 +38,22 @@ program.command('list')
         );
     });
 
+program.command('remove')
+    .description('remove registered repos')
+    .option('-h, --host <host>', 'filter by host', '<all>')
+    .option('-ns, --namespace <namespace>', 'filter by namespace', '<all>')
+    .option('-s, --scope <scope>', 'filter by scope', '<all>')
+    .option('-r, --repo <repo>', 'filter by repo', '<all>')
+    .action((options) => {
+        // noinspection JSUnresolvedVariable
+        codeNavStore.remove({
+            host: options.host,
+            namespace: options.namespace,
+            scope: options.scope,
+            alias: options.repo
+        });
+    });
+
 program.command('clone')
     .description('clone registered repos')
     .option('-h, --host <host>', 'filter by host', '<all>')

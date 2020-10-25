@@ -16,6 +16,10 @@ class LevelStore {
         return this.mainDB.put(key, JSON.stringify(value));
     }
 
+    del(key) {
+        return this.mainDB.del(key);
+    }
+
     list(predicates, callback) {
         return this.mainDB.createReadStream().on('data', (data) => {
             const item = JSON.parse(data.value.toString());
