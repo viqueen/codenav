@@ -24,6 +24,7 @@ class RestClient {
                 headers: Object.assign({}, this.headers, {
                     'User-Agent': 'code-navigation',
                     'Content-Type': 'application/json',
+                    connection: 'keep-alive',
                 }),
             });
             const callback = (response) => {
