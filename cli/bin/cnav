@@ -12,8 +12,12 @@ const codeNavStore = new CodeNavStore(codeNavConfig);
 
 program.command('register <urlConnection>')
     .description('registers a new repo using its url connection')
-    .action((urlConnection) => {
-        codeNavStore.register(urlConnection);
+    .option('-s, --scope <scope>', 'explicitly set the scope', codeNavConfig.get('cnav.scope'))
+    .action((urlConnection, options) => {
+        codeNavStore.register({
+            urlConnection: urlConnection,
+            scope: options.scope
+        });
     });
 
 program.command('list')

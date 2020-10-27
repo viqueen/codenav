@@ -3,7 +3,6 @@ const LevelStore = require('../util/level-store');
 const ConnectionUrl = require('../util/connection-url');
 const CloneCmd = require('../cmd/clone-cmd');
 const CodeNavRepo = require('./codenav-repo');
-const { spawn } = require('child_process');
 const fs = require('fs');
 
 class CodeNavStore {
@@ -12,13 +11,12 @@ class CodeNavStore {
             path: path.resolve(config.directory(), 'db'),
             indexes: ['name', 'namespace', 'host'],
         });
-        this.shellCmd = config.get('shell.cmd');
-        this.scope = config.get('cnav.scope');
         this.codeNavRepo = new CodeNavRepo(config);
         this.cloneCmd = new CloneCmd(this.codeNavRepo);
     }
 
-    register(urlConnection) {
+    register(options) {
+        const { scope, urlConnection } = options;
         const parsed = ConnectionUrl.parse(urlConnection);
         if (!parsed) {
             // TODO : handle error / warning
@@ -32,7 +30,7 @@ class CodeNavStore {
             namespace: parsed.namespace,
             alias: parsed.name,
             host: parsed.host,
-            scope: this.scope,
+            scope: scope,
         });
     }
 
