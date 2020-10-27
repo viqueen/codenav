@@ -96,6 +96,7 @@ program.command('get-config <key>')
 program.command('github <namespace>')
     .description('register repos from github with given namespace')
     .option('-p, --protocol <protocol>', 'url connection protocol', 'ssh')
+    .option('-s, --scope <scope>', 'select scope', codeNavConfig.get('cnav.scope'))
     .action((namespace, options) => {
         const githubClient = new RestClient({
             host: 'api.github.com'
@@ -104,7 +105,10 @@ program.command('github <namespace>')
         // TODO : handle pagination
         githubClient.get(`/users/${namespace}/repos`)
             .then(json => {
-                json.forEach(item => codeNavStore.register(item[urlKey]));
+                json.forEach(item => codeNavStore.register({
+                    urlConnection: item[urlKey],
+                    scope: options.scope
+                }));
             })
             .catch(error => console.log);
     });
@@ -112,6 +116,7 @@ program.command('github <namespace>')
 program.command('bitbucket <namespace>')
     .description('register repos from bitbucket with given namespace')
     .option('-p, --protocol <protocol>', 'url connection protocol', 'ssh')
+    .option('-s, --scope <scope>', 'select scope', codeNavConfig.get('cnav.scope'))
     .action((namespace, options) => {
         const bitbucketClient = new RestClient({
             host: 'api.bitbucket.org'
@@ -122,7 +127,10 @@ program.command('bitbucket <namespace>')
                 json.values
                     .flatMap(item => item.links.clone)
                     .filter(item => item.name === options.protocol)
-                    .forEach(item => codeNavStore.register(item.href));
+                    .forEach(item => codeNavStore.register({
+                        urlConnection: item.href,
+                        scope: options.scope
+                    }));
             })
             .catch(error => console.log);
     });
@@ -131,6 +139,7 @@ program.command('stash <project>')
     .description('register repos from bitbucket dc for a given project')
     .option('-i, --instance <instance>', 'select instance name', 'stash')
     .option('-p, --protocol <protocol>', 'url connection protocol', 'ssh')
+    .option('-s, --scope <scope>', 'select scope', codeNavConfig.get('cnav.scope'))
     .action((project, options) => {
         const url = codeNavConfig.get(`${options.instance}.url`);
         const token = codeNavConfig.get(`${options.instance}.token`);
@@ -155,7 +164,8 @@ program.command('stash <project>')
             token: token,
             project: project,
             codeNavStore: codeNavStore,
-            protocol: options.protocol
+            protocol: options.protocol,
+            scope: options.scope
         });
         stashRegisterCmd.execute();
     });

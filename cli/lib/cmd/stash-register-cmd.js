@@ -3,7 +3,14 @@ const PaginationHandler = require('../util/pagination-handler');
 
 class StashRegisterCmd {
     constructor(options) {
-        const { urlParts, token, project, codeNavStore, protocol } = options;
+        const {
+            urlParts,
+            token,
+            project,
+            codeNavStore,
+            protocol,
+            scope,
+        } = options;
         const context = urlParts.context === '/' ? '' : urlParts.context;
         const targetResource = `${context}/rest/api/1.0/projects/${project}/repos`;
 
@@ -38,7 +45,10 @@ class StashRegisterCmd {
                     .catch(console.error);
             },
             itemProcessor: (item) => {
-                codeNavStore.register(item.href);
+                codeNavStore.register({
+                    urlConnection: item.href,
+                    scope: scope,
+                });
             },
         });
     }
