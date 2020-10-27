@@ -10,9 +10,13 @@ class StashRegisterCmd {
             codeNavStore,
             protocol,
             scope,
+            label,
         } = options;
+
         const context = urlParts.context === '/' ? '' : urlParts.context;
-        const targetResource = `${context}/rest/api/1.0/projects/${project}/repos`;
+        const targetResource = label
+            ? `${context}/rest/api/1.0/labels/${label}/labeled`
+            : `${context}/rest/api/1.0/projects/${project}/repos`;
 
         this.stashClient = new RestClient({
             protocol: urlParts.protocol,
@@ -35,6 +39,7 @@ class StashRegisterCmd {
                             ? undefined
                             : { start: json.nextPageStart, limit: 100 };
                         const items = json.values
+                            .filter((item) => item.project.key === project)
                             .flatMap((item) => item.links.clone)
                             .filter((item) => item.name === protocol);
                         return {

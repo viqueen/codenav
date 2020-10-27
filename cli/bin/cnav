@@ -140,6 +140,7 @@ program.command('stash <project>')
     .option('-i, --instance <instance>', 'select instance name', 'stash')
     .option('-p, --protocol <protocol>', 'url connection protocol', 'ssh')
     .option('-s, --scope <scope>', 'select scope', codeNavConfig.get('cnav.scope'))
+    .option('-l, --label <label>', 'select stash label')
     .action((project, options) => {
         const url = codeNavConfig.get(`${options.instance}.url`);
         const token = codeNavConfig.get(`${options.instance}.token`);
@@ -165,7 +166,8 @@ program.command('stash <project>')
             project: project,
             codeNavStore: codeNavStore,
             protocol: options.protocol,
-            scope: options.scope
+            scope: options.scope,
+            label: options.label
         });
         stashRegisterCmd.execute();
     });
