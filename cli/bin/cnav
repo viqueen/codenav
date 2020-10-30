@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 
 const program = require('commander');
+const path = require('path');
 const CodeNavConfig = require('../lib/codenav/codenav-config');
 const CodeNavStore = require('../lib/codenav/codenav-store');
 const RestClient = require('../lib/util/rest-client');
 const UrlParser = require('../lib/util/url-parser');
 const StashRegisterCmd = require('../lib/cmd/stash-register-cmd');
+const ExecCmd = require('../lib/cmd/exec-cmd');
+const CodeNavRepo = require('../lib/codenav/codenav-repo');
 
 const codeNavConfig = new CodeNavConfig();
 const codeNavStore = new CodeNavStore(codeNavConfig);
+const codeNavRepo = new CodeNavRepo(codeNavConfig);
 
 program.command('register <urlConnection>')
     .description('registers a new repo using its url connection')
@@ -170,6 +174,23 @@ program.command('stash <project>')
             label: options.label
         });
         stashRegisterCmd.execute();
+    });
+
+program.command('exec <executableFile>')
+    .description('execute script on target repos')
+    .option('-s, --scope <scope>', 'filter by scope', codeNavConfig.get('cnav.scope'))
+    .option('-r, --repo <repo>', 'filter by repo', '<all>')
+    .action((executableFile, options) => {
+        const executable = path.resolve(process.cwd(), executableFile);
+        // noinspection JSUnresolvedVariable
+        const execCmd = new ExecCmd({
+            executable: executable,
+            scope: options.scope,
+            alias: options.repo,
+            codeNavStore: codeNavStore,
+            codeNavRepo: codeNavRepo
+        });
+        execCmd.execute();
     });
 
 program.version('1.0.0');

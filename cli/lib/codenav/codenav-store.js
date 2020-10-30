@@ -56,6 +56,10 @@ class CodeNavStore {
         });
     }
 
+    stream(filters, callback) {
+        this.store.list(this._predicates(filters), (item) => callback(item));
+    }
+
     remove(filters) {
         this.store.list(this._predicates(filters), (item) => {
             this.store.del(item.ID);
