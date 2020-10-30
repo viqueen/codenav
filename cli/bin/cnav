@@ -176,15 +176,16 @@ program.command('stash <project>')
         stashRegisterCmd.execute();
     });
 
-program.command('exec <executableFile>')
+program.command('exec <executableFile> [args...]')
     .description('execute script on target repos')
     .option('-s, --scope <scope>', 'filter by scope', codeNavConfig.get('cnav.scope'))
     .option('-r, --repo <repo>', 'filter by repo', '<all>')
-    .action((executableFile, options) => {
+    .action((executableFile, args, options) => {
         const executable = path.resolve(process.cwd(), executableFile);
         // noinspection JSUnresolvedVariable
         const execCmd = new ExecCmd({
             executable: executable,
+            args: args,
             scope: options.scope,
             alias: options.repo,
             codeNavStore: codeNavStore,

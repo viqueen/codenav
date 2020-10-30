@@ -8,6 +8,7 @@ class ExecCmd {
         this.scope = options.scope;
         this.alias = options.alias;
         this.executable = options.executable;
+        this.args = options.args;
         this.taskExecutor = new TaskExecutor({});
     }
 
@@ -21,18 +22,20 @@ class ExecCmd {
                 const directory = this.codeNavRepo.location(item);
                 const runnable = () => {
                     return new Promise((resolve) => {
-                        execFile(
+                        const _exec = execFile(
                             this.executable,
-                            [],
-                            { cwd: directory },
-                            (error, stdout, stderr) => {
-                                if (error) {
-                                    throw error;
-                                }
-                                console.log(stdout);
-                                console.error(stderr);
-                            }
+                            this.args,
+                            { cwd: directory, stdio: 'inherit' }
                         );
+                        _exec.stdout.on('data', (data) => {
+                            process.stdout.write(data.toString());
+                        });
+                        _exec.stderr.on('data', (data) => {
+                            process.stderr.write(data.toString());
+                        })
+                        _exec.on('exit', () => {
+                            resolve();
+                        });
                     });
                 };
                 this.taskExecutor.submit(runnable);
