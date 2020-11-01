@@ -22,17 +22,16 @@ class ExecCmd {
                 const directory = this.codeNavRepo.location(item);
                 const runnable = () => {
                     return new Promise((resolve) => {
-                        const _exec = execFile(
-                            this.executable,
-                            this.args,
-                            { cwd: directory, stdio: 'inherit' }
-                        );
+                        const _exec = execFile(this.executable, this.args, {
+                            cwd: directory,
+                            stdio: 'inherit',
+                        });
                         _exec.stdout.on('data', (data) => {
                             process.stdout.write(data.toString());
                         });
                         _exec.stderr.on('data', (data) => {
                             process.stderr.write(data.toString());
-                        })
+                        });
                         _exec.on('exit', () => {
                             resolve();
                         });

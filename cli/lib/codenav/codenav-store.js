@@ -22,7 +22,7 @@ class CodeNavStore {
             // TODO : handle error / warning
             return;
         }
-        console.log(`registering : ${urlConnection}`);
+        console.log(`scope: ${scope} / registering : ${urlConnection}`);
         const ID = [parsed.namespace, parsed.name].join('/');
         return this.store.put(ID, {
             ID: ID,
