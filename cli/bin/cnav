@@ -28,7 +28,7 @@ program.command('list')
     .description('lists registered repos')
     .option('-h, --host <host>', 'filter by host', '<all>')
     .option('-ns, --namespace <namespace>', 'filter by namespace', '<all>')
-    .option('-s, --scope <scope>', 'filter by scope', '<all>')
+    .option('-s, --scope <scope>', 'filter by scope', codeNavConfig.get('cnav.scope'))
     .option('-l, --location', 'display checkout location only', false)
     .option('-r, --repo <repo>', 'filter by repo', '<all>')
     .action((options) => {
