@@ -19,11 +19,10 @@ class CodeNavStore {
         const { scope, urlConnection } = options;
         const parsed = ConnectionUrl.parse(urlConnection);
         if (!parsed) {
-            // TODO : handle error / warning
-            return;
+            throw new Error(`invalid connection url : ${urlConnection}`);
         }
         console.log(`scope: ${scope} / registering : ${urlConnection}`);
-        const ID = [parsed.namespace, parsed.name].join('/');
+        const ID = [scope, parsed.namespace, parsed.name].join('/');
         return this.store.put(ID, {
             ID: ID,
             connection: urlConnection,
