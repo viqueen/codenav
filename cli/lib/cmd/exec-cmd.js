@@ -6,7 +6,7 @@ class ExecCmd {
         this.codeNavStore = options.codeNavStore;
         this.codeNavRepo = options.codeNavRepo;
         this.scope = options.scope;
-        this.alias = options.alias;
+        this.aliases = options.aliases;
         this.executable = options.executable;
         this.args = options.args;
         this.taskExecutor = new TaskExecutor({});
@@ -16,7 +16,7 @@ class ExecCmd {
         this.codeNavStore.stream(
             {
                 scope: this.scope,
-                alias: this.alias,
+                aliases: this.aliases,
             },
             (item) => {
                 const directory = this.codeNavRepo.location(item);

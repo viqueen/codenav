@@ -14,13 +14,14 @@ const codeNavConfig = new CodeNavConfig();
 const codeNavStore = new CodeNavStore(codeNavConfig);
 const codeNavRepo = new CodeNavRepo(codeNavConfig);
 
-program.command('register <urlConnection>')
+program.command('register <urlConnection> [aliases...]')
     .description('registers a new repo using its url connection')
     .option('-s, --scope <scope>', 'explicitly set the scope', codeNavConfig.get('cnav.scope'))
-    .action((urlConnection, options) => {
+    .action((urlConnection, aliases, options) => {
         codeNavStore.register({
             urlConnection: urlConnection,
-            scope: options.scope
+            scope: options.scope,
+            aliases: aliases
         });
     });
 
@@ -38,7 +39,7 @@ program.command('list')
                 host: options.host,
                 namespace: options.namespace,
                 scope: options.scope,
-                alias: options.repo
+                aliases: options.repo
             },
             {
                 location: options.location
@@ -58,7 +59,7 @@ program.command('remove')
             host: options.host,
             namespace: options.namespace,
             scope: options.scope,
-            alias: options.repo
+            aliases: options.repo
         });
     });
 
@@ -187,7 +188,7 @@ program.command('exec <executableFile> [args...]')
             executable: executable,
             args: args,
             scope: options.scope,
-            alias: options.repo,
+            aliases: options.repo,
             codeNavStore: codeNavStore,
             codeNavRepo: codeNavRepo
         });

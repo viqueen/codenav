@@ -16,18 +16,22 @@ class CodeNavStore {
     }
 
     register(options) {
-        const { scope, urlConnection } = options;
+        const { scope, urlConnection, aliases } = options;
         const parsed = ConnectionUrl.parse(urlConnection);
         if (!parsed) {
             throw new Error(`invalid connection url : ${urlConnection}`);
         }
         console.log(`scope: ${scope} / registering : ${urlConnection}`);
+
         const ID = [scope, parsed.namespace, parsed.name].join('/');
+        aliases.push(parsed.name);
+
         return this.store.put(ID, {
             ID: ID,
             connection: urlConnection,
             namespace: parsed.namespace,
             alias: parsed.name,
+            aliases: aliases,
             host: parsed.host,
             scope: scope,
         });
@@ -38,7 +42,14 @@ class CodeNavStore {
             if (e[1] === '<all>') {
                 return () => true;
             }
-            return (item) => item[e[0]] === e[1];
+            return (item) => {
+                const value = item[e[0]];
+                const filter = e[1];
+                if (Array.isArray(value)) {
+                    return value.includes(filter);
+                }
+                return value === filter;
+            };
         });
     }
 

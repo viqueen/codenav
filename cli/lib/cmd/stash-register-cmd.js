@@ -53,6 +53,7 @@ class StashRegisterCmd {
                 codeNavStore.register({
                     urlConnection: item.href,
                     scope: scope,
+                    aliases: [],
                 });
             },
         });
