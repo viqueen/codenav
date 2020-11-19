@@ -32,6 +32,7 @@ program.command('list')
     .option('-s, --scope <scope>', 'filter by scope', codeNavConfig.get('cnav.scope'))
     .option('-l, --location', 'display checkout location only', false)
     .option('-r, --repo <repo>', 'filter by repo', '<all>')
+    .option('-f, --filter <keyword>', 'filter by keyword', '<all>')
     .action((options) => {
         // noinspection JSUnresolvedVariable
         codeNavStore.list(
@@ -39,7 +40,8 @@ program.command('list')
                 host: options.host,
                 namespace: options.namespace,
                 scope: options.scope,
-                aliases: options.repo
+                aliases: options.repo,
+                filter: options.filter
             },
             {
                 location: options.location

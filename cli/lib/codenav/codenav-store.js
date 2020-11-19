@@ -43,6 +43,10 @@ class CodeNavStore {
                 return () => true;
             }
             return (item) => {
+                if (e[0] === 'filter' && e[1] !== '<all>') {
+                    return item.alias.includes(e[1]);
+                }
+
                 const value = item[e[0]];
                 const filter = e[1];
                 if (Array.isArray(value)) {
