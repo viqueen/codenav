@@ -1,13 +1,10 @@
-import { EventEmitter } from 'events';
-
 interface Task {
     run(): Promise<any>;
 }
 
-interface TaskExecutor extends EventEmitter {
-    queue: Array<Task>;
-    concurrent: number;
-    maxConcurrent: number;
+interface TaskExecutor {
+    readonly queue: Array<Task>;
+    readonly maxConcurrent: number;
     submit(task: Task): void;
 }
 
@@ -16,7 +13,7 @@ interface Command {
 }
 
 interface Service {
-    store: Store;
-    executor: TaskExecutor;
-    execute(command: Command, filter: ItemFilter): void;
+    readonly store: Store;
+    readonly executor: TaskExecutor;
+    _execute(command: Command, filter: ItemFilter): void;
 }
