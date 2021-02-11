@@ -11,5 +11,5 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "cli/lib", "dist"]
+  "exclude": ["node_modules", "cli/lib", "dist", "src/**/*.spec.ts"]
 }
