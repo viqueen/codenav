@@ -4,7 +4,8 @@ module.exports = {
         '**/__tests__/**/*.+(ts|tsx|js)',
         '**/?(*.)+(spec|test).+(ts|tsx|js)',
     ],
-    transform: {
-        '^.+\\.(ts|tsx)$': 'jasmine-ts',
-    },
+    preset: 'ts-jest',
+    testEnvironment: 'node',
+    collectCoverage: true,
+    coverageDirectory: 'coverage',
 };
