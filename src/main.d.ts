@@ -49,4 +49,14 @@ interface Service {
     _execute(command: Command, filter: ItemFilter): void;
 }
 
-// LEVEL-DB
+// TOOL
+
+interface Input {
+    readonly connection: string;
+    readonly workspace: string;
+    readonly aliases: Array<string>;
+}
+
+interface ItemSupplier {
+    parse(input: Input): Item | undefined;
+}
