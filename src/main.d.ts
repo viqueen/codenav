@@ -60,3 +60,12 @@ interface Input {
 interface ItemSupplier {
     parse(input: Input): Item | undefined;
 }
+
+interface CodeNav {
+    readonly configuration: Configuration;
+    readonly store: Store;
+    readonly service: Service;
+    readonly itemSupplier: ItemSupplier;
+
+    register(input: Input): Promise<Item>;
+}
