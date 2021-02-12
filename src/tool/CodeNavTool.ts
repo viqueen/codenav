@@ -22,4 +22,12 @@ export class CodeNavTool implements CodeNav {
         console.log(`registering: ${input}`);
         return this.store.add(item);
     }
+
+    list(itemFilter: ItemFilter): Promise<Array<Item>> {
+        return this.store.list(itemFilter);
+    }
+
+    remove(itemFilter: ItemFilter): Promise<Array<Item>> {
+        return this.store.remove(itemFilter);
+    }
 }

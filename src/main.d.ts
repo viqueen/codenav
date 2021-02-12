@@ -46,7 +46,7 @@ interface Command {
 interface Service {
     readonly store: Store;
     readonly executor: TaskExecutor;
-    _execute(command: Command, filter: ItemFilter): void;
+    execute(command: Command, filter: ItemFilter): void;
 }
 
 // TOOL
@@ -67,5 +67,8 @@ interface CodeNav {
     readonly service: Service;
     readonly itemSupplier: ItemSupplier;
 
+    // data operations
     register(input: Input): Promise<Item>;
+    list(itemFilter: ItemFilter): Promise<Array<Item>>;
+    remove(itemFilter: ItemFilter): Promise<Array<Item>>;
 }

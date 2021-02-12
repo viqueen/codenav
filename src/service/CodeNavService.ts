@@ -9,7 +9,7 @@ export class CodeNavService implements Service {
         this.executor = new SimpleTaskExecutor(maxConcurrent);
     }
 
-    _execute(command: Command, filter: ItemFilter): void {
+    execute(command: Command, filter: ItemFilter): void {
         this.store.list(filter).then((items) => {
             items.map(command.process).forEach(this.executor.submit);
         });
