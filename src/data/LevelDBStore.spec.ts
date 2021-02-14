@@ -6,6 +6,9 @@ const configuration: Configuration = {
     get: () => {
         return '';
     },
+    config(): object {
+        return {};
+    },
 };
 
 const store = new LevelDBStore(configuration);

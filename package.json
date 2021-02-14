@@ -4,7 +4,8 @@
   "description": "code navigation",
   "bin": {
     "cnav": "./cli/bin/cnav",
-    "goto": "./cli/bin/goto"
+    "goto": "./cli/bin/goto",
+    "cnav2": "./dist/cli/index.js"
   },
   "scripts": {
     "pretty:check": "prettier --check .",

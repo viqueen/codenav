@@ -19,7 +19,7 @@ export class CodeNavTool implements CodeNav {
         if (!item) {
             throw new Error(`invalid connection url : ${input.connection}`);
         }
-        console.log(`registering: ${input}`);
+        console.log('registering:', input);
         return this.store.add(item);
     }
 

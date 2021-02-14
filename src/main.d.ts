@@ -17,7 +17,8 @@ interface ItemFilter {
 interface Configuration {
     readonly directory: string;
     set(key: string, value: string): void;
-    get(ket: string): string;
+    get(key: string): string | undefined;
+    config(): object;
 }
 
 interface Store {
