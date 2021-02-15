@@ -38,6 +38,18 @@ commander
 
 // code navigation handlers
 
+const itemFilter = (item: Item, options: any) => {
+    return (
+        (options.host ? options.host === item.host : true) &&
+        (options.namespace ? options.namespace === item.namespace : true) &&
+        (options.workspace ? options.workspace === item.workspace : true) &&
+        (options.filter
+            ? item.slug.includes(options.filer) ||
+              item.aliases.includes(options.filter)
+            : true)
+    );
+};
+
 commander
     .command('register <connection> [aliases...]')
     .description('registers a new repo using its url connection')
@@ -63,23 +75,20 @@ commander
     .option('-w, --workspace <workspace>', 'filter by workspace')
     .option('-f, --filter <keyword>', 'filter by keyword')
     .action((options) => {
-        tool.list((item: Item) => {
-            return (
-                (options.host ? options.host === item.host : true) &&
-                (options.namespace
-                    ? options.namespace === item.namespace
-                    : true) &&
-                (options.workspace
-                    ? options.workspace === item.workspace
-                    : true) &&
-                (options.filter
-                    ? item.slug.includes(options.filer) ||
-                      item.aliases.includes(options.filter)
-                    : true)
-            );
-        }).then((items) => {
+        tool.list((item) => itemFilter(item, options)).then((items) => {
             items.forEach((item) => console.log(item));
         });
+    });
+
+commander
+    .command('clone')
+    .description('clone registered repos')
+    .option('-h, --host <host>', 'filter by host')
+    .option('-ns, --namespace <namespace>', 'filter by namespace')
+    .option('-w, --workspace <workspace>', 'filter by workspace')
+    .option('-f, --filter <keyword>', 'filter by keyword')
+    .action((options) => {
+        tool.clone((item) => itemFilter(item, options));
     });
 
 commander.version('2.0.0');

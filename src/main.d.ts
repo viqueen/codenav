@@ -62,6 +62,11 @@ interface ItemSupplier {
     parse(input: Input): Item | undefined;
 }
 
+interface ItemLocation {
+    readonly configuration: Configuration;
+    resolve(item: Item): string;
+}
+
 interface CodeNav {
     readonly configuration: Configuration;
     readonly store: Store;
@@ -72,4 +77,7 @@ interface CodeNav {
     register(input: Input): Promise<Item>;
     list(itemFilter: ItemFilter): Promise<Array<Item>>;
     remove(itemFilter: ItemFilter): Promise<Array<Item>>;
+
+    // repository operations
+    clone(itemFilter: ItemFilter): void;
 }
