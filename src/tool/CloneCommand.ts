@@ -10,10 +10,13 @@ export class CloneCommand implements Command {
 
     process(item: Item): Task {
         const target = this.itemLocation.resolve(item);
-        return new SimpleTask(() =>
-            simpleGit()
+        return new SimpleTask(() => {
+            console.log(`cloning ${item.connection} into ${target}`);
+            return simpleGit()
                 .clone(item.connection, target)
-                .then(() => console.log(`cloned ${item.connection} into ${target}`))
-        );
+                .then(() =>
+                    console.log(`cloned ${item.connection} into ${target}`)
+                );
+        });
     }
 }

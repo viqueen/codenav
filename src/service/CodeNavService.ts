@@ -12,7 +12,7 @@ export class CodeNavService implements Service {
     execute(command: Command, filter: ItemFilter): void {
         this.store.list(filter).then((items) => {
             items
-                .map(item => command.process(item))
+                .map((item) => command.process(item))
                 .forEach((task) => this.executor.submit(task));
         });
     }
