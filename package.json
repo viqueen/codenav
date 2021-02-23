@@ -1,6 +1,6 @@
 {
   "name": "codenav",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "code navigation",
   "bin": {
     "cnav": "./cli/bin/cnav",
@@ -18,7 +18,7 @@
     "code",
     "navigation"
   ],
-  "author": "Hasnae R.",
+  "author": "Hasnae R. <>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/viqueen/codenav/issues"
