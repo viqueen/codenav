@@ -4,12 +4,18 @@
   "description": "code navigation",
   "bin": {
     "cnav": "./cli/bin/cnav",
-    "goto": "./cli/bin/goto"
+    "goto": "./cli/bin/goto",
+    "cnav2": "./dist/index.js"
   },
   "scripts": {
+    "build:dev": "tsc --watch",
+    "build:prod": "rimraf ./dist && tsc",
     "pretty:check": "prettier --check .",
     "pretty": "prettier --check --write ."
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/viqueen/codenav.git"
@@ -25,8 +31,11 @@
   },
   "homepage": "https://github.com/viqueen/codenav#readme",
   "devDependencies": {
+    "@types/node": "^14.14.31",
     "husky": "^4.2.5",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.1.5"
   },
   "husky": {
     "hooks": {

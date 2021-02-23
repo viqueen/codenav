@@ -7,5 +7,13 @@ module.exports = {
                 singleQuote: true,
             },
         },
+        {
+            files: '*.ts',
+            options: {
+                tabWidth: 4,
+                singleQuote: true,
+                trailingComma: 'none',
+            },
+        },
     ],
 };
