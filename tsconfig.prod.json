@@ -11,5 +11,12 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "cli", "dist", "coverage", "jest.config.js"]
+  "exclude": [
+    "node_modules",
+    "cli",
+    "dist",
+    "coverage",
+    "src/**/*.test.ts",
+    "jest.config.js"
+  ]
 }
