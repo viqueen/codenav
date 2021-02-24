@@ -7,10 +7,10 @@ export class JsonFileConfiguration implements Configuration {
     readonly directory!: string;
     readonly fileConfig!: string;
 
-    constructor(directory: string) {
+    constructor(directory: string, fileConfigName: string = '.cnavrc') {
         this.directory = directory;
         mkdirSync(this.directory, { recursive: true });
-        this.fileConfig = path.resolve(this.directory, '.cnavrc');
+        this.fileConfig = path.resolve(this.directory, fileConfigName);
         if (!existsSync(this.fileConfig)) {
             const defaultConfiguration = {
                 'sources.root': path.resolve(homedir(), 'sources')
