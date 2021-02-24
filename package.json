@@ -1,6 +1,6 @@
 {
   "name": "codenav",
-  "version": "2.0.0-m05",
+  "version": "2.0.0-m06",
   "description": "code navigation",
   "bin": {
     "cnav": "./dist/index.js"

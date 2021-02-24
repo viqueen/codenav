@@ -196,5 +196,5 @@ commander
         });
     });
 
-commander.version('2.0.0');
+commander.version(require('../package.json').version);
 commander.parse(process.argv);
