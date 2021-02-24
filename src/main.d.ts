@@ -1,5 +1,7 @@
 // data
 
+import { Task, TaskExecutor } from 'task-pool-executor';
+
 interface Item {
     readonly ID: string;
     readonly connection: string;
@@ -46,4 +48,14 @@ interface Options {
     readonly host?: string;
     readonly slug?: string;
     readonly keyword?: string;
+}
+
+interface ItemCommand {
+    make(item: Item): Task;
+}
+
+interface Service {
+    readonly executor: TaskExecutor;
+    readonly store: Store;
+    execute(command: ItemCommand, filter: ItemFilter): void;
 }

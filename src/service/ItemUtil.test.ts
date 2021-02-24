@@ -1,4 +1,4 @@
-import { itemTransformer } from './ItermService';
+import { itemTransformer } from './ItermUtil';
 
 const sshItem = {
     ID: 'tools/viqueen/codenav',

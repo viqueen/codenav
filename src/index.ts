@@ -5,8 +5,10 @@ import { JsonFileConfiguration } from './data/JsonFileConfiguration';
 import { homedir } from 'os';
 import path from 'path';
 import { LevelDBStore } from './data/LevelDBStore';
-import { itemTransformer } from './service/ItermService';
-import __ from 'lodash/fp/__';
+import { itemTransformer } from './service/ItermUtil';
+import { Input, Item, Options } from './main';
+import { DefaultService } from './service/DefaultService';
+import { CloneCommand } from './command/CloneCommand';
 
 // configuration handlers
 
@@ -39,6 +41,8 @@ commander
 // repo handlers
 
 const store = new LevelDBStore(configuration);
+const service = new DefaultService(store);
+
 const options = () => {
     const { workspace, host, namespace, slug, keyword } = commander;
     return {
@@ -77,7 +81,12 @@ commander
             workspace: commander.workspace,
             aliases: aliases
         };
-        itemTransformer(input).then((item) => store.add(item));
+        itemTransformer(input).then((item: Item) => {
+            store.add(item);
+            console.log(
+                `registered on workspace: ${item.workspace} / ${item.connection}`
+            );
+        });
     });
 
 commander
@@ -85,7 +94,7 @@ commander
     .description('lists registered repos')
     .action(() => {
         store
-            .list((item) => itemFilter(item, options()))
+            .list((item: Item) => itemFilter(item, options()))
             .then((items) => {
                 items.forEach((item) => console.log(item));
             });
@@ -96,13 +105,23 @@ commander
     .description('removes registered repos')
     .action(() => {
         store
-            .remove((item) => itemFilter(item, options()))
+            .remove((item: Item) => itemFilter(item, options()))
             .then((items) => {
                 console.log('removed items:');
                 items
                     .map((item) => item.ID)
                     .forEach((item) => console.log(item));
             });
+    });
+
+commander
+    .command('clone')
+    .description('clone registered repos')
+    .action(() => {
+        service.execute(
+            new CloneCommand(configuration.get('sources.root')),
+            (item: Item) => itemFilter(item, options())
+        );
     });
 
 commander.version('2.0.0');
