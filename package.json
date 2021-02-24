@@ -3,9 +3,7 @@
   "version": "2.0.0",
   "description": "code navigation",
   "bin": {
-    "cnav": "./cli/bin/cnav",
-    "goto": "./cli/bin/goto",
-    "cnav2": "./dist/index.js"
+    "cnav": "./dist/index.js"
   },
   "scripts": {
     "build:dev": "tsc --watch",
@@ -17,6 +15,8 @@
   "files": [
     "dist"
   ],
+  "main": "dist/index",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/viqueen/codenav.git"
