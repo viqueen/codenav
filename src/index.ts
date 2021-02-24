@@ -11,6 +11,7 @@ import { DefaultService } from './service/DefaultService';
 import { CloneCommand } from './command/CloneCommand';
 import { StashProvider } from './provider/StashProvider';
 import { BitbucketProvider } from './provider/BitbucketProvider';
+import { GitHubProvider } from './provider/GitHubProvider';
 
 // configuration handlers
 
@@ -163,6 +164,18 @@ commander
         const { workspace } = commander;
         const bitbucketProvider = new BitbucketProvider(store);
         bitbucketProvider.register({
+            workspace: workspace,
+            namespace: namespace
+        });
+    });
+
+commander
+    .command('github <namespace>')
+    .description('register repos from github with given namespace')
+    .action((namespace) => {
+        const { workspace } = commander;
+        const githubProvider = new GitHubProvider(store);
+        githubProvider.register({
             workspace: workspace,
             namespace: namespace
         });
