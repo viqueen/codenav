@@ -65,6 +65,7 @@ const itemFilter = (item: Item, opts: Options) => {
         (opts.host ? opts.host === item.host : true) &&
         (opts.namespace ? opts.namespace === item.namespace : true) &&
         (opts.workspace ? opts.workspace === item.workspace : true) &&
+        (opts.slug ? item.aliases.includes(opts.slug) : true) &&
         (opts.keyword
             ? item.slug.includes(opts.keyword) ||
               item.aliases.includes(opts.keyword)
@@ -100,11 +101,18 @@ commander
 commander
     .command('list')
     .description('lists registered repos')
-    .action(() => {
+    .option('-dl, --display-location', 'display location only', false)
+    .action((opts) => {
         store
             .list((item: Item) => itemFilter(item, options()))
             .then((items) => {
-                items.forEach((item) => console.log(item));
+                items.forEach((item) => {
+                    if (opts['displayLocation']) {
+                        console.log(location.resolve(item));
+                    } else {
+                        console.log(item);
+                    }
+                });
             });
     });
 
