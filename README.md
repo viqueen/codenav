@@ -1,6 +1,7 @@
 ## Code Navigation
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=viqueen_codenav&metric=alert_status)](https://sonarcloud.io/dashboard?id=viqueen_codenav)
+[![Known Vulnerabilities](https://snyk.io/test/github/viqueen/codenav/badge.svg?targetFile=package.json)](https://snyk.io/test/github/viqueen/codenav?targetFile=package.json)
 
 ### install it
 
@@ -16,6 +17,7 @@ npm install -g codenav
 git clone git@github.com:viqueen/codenav.git
 cd codenav
 
+npm install
 npm link
 ```
 
@@ -31,32 +33,37 @@ cnav config
 
 ```bash
 cnav set-config sources.root <path/to/sources/root>
-cnav set-config shell.cmd <bash|zsh>
 ```
 
 ### use it
 
-- cnav
+- available commands
 
 ```
->> cnav -h
+>> cnav --help
 
 Options:
-  -V, --version                output the version number
-  -h, --help                   display help for command
+  -w, --workspace <name>                 filter by workspace (default: "default")
+  -h, --host <name>                      filter by host
+  -ns, --namespace <name>                filter by namespace
+  -s, --slug <name>                      filter by name/slug
+  -k, --keyword <keyword>                filter by keyword
+  -V, --version                          output the version number
+  --help                                 display help for command
 
 Commands:
-  register <urlConnection>         registers a new repo using its url connection
-  list [options]                   lists registered repos
-  clone [options]                  clone registered repos
-  config                           displays cnav configuration
-  set-config <key> <value>         updates cnav configuration entry
-  get-config <key>                 gets cnav configuration entry
-  go <alias>                       go to repo directory
-  github [options] <namespace>     register repos from github with given namespace
-  bitbucket [options] <namespace>  register repos from bitbucket with given namespace
-  stash [options] <project>        register repos from bitbucket dc for a given project
-  help [command]                   display help for command
+  config                                 displays cnav configuration
+  set-config <key> <value>               updates cnav configuration entry
+  get-config <key>                       gets cnav configuration entry
+  register <urlConnection> [aliases...]  registers a new repo using its url connection
+  list                                   lists registered repos
+  remove                                 removes registered repos
+  clone                                  clone registered repos
+  exec <executableFile> [args...]        execute script on target repos
+  stash <project>                        register repos from stash for a given project
+  bitbucket <namespace>                  register repos from bitbucket with given namespace
+  github <namespace>                     register repos from github with given namespace
+  help [command]                         display help for command
 ```
 
 - register repos from bitbucket
@@ -89,10 +96,11 @@ Usage: cnav list [options]
 lists registered repos
 
 Options:
-  -h, --host <host>             filter by host (default: "<all>")
-  -ns, --namespace <namespace>  filter by namespace (default: "<all>")
-  -s, --scope <scope>           filter by scope (default: "<all>")
-  -l, --location                display checkout location only (default: false)
+  -w, --workspace <name>                 filter by workspace (default: "default")
+  -h, --host <name>                      filter by host
+  -ns, --namespace <name>                filter by namespace
+  -s, --slug <name>                      filter by name/slug
+  -k, --keyword <keyword>                filter by keyword
 ```
 
 </p>
@@ -103,6 +111,7 @@ cnav list
 cnav list -ns <username|org>
 cnav list -h <github.com|bitbucket.org>
 cnav list -ns <username|org> -h <github.com|bitbucket.org>
+cnav list -w <workspace>
 ```
 
 - clone repos
@@ -117,9 +126,11 @@ Usage: cnav clone [options]
 clone registered repos
 
 Options:
-  -h, --host <host>             filter by host (default: "<all>")
-  -ns, --namespace <namespace>  filter by namespace (default: "<all>")
-  -s, --scope <scope>           filter by scope (default: "<all>")
+  -w, --workspace <name>                 filter by workspace (default: "default")
+  -h, --host <name>                      filter by host
+  -ns, --namespace <name>                filter by namespace
+  -s, --slug <name>                      filter by name/slug
+  -k, --keyword <keyword>                filter by keyword
 ```
 
 </p>
@@ -130,12 +141,5 @@ cnav clone
 cnav clone -ns <username|org>
 cnav clone -h <github.com|bitbucket.org>
 cnav clone -ns <username|org> -h <github.com|bitbucket.org>
+cnav clone -w <workspace>
 ```
-
-- navigate to repo
-
-```bash
-cnav go <name>
-```
-
-> :warning: make sure your `shell.cmd` config is set to the shell you are using (either bash or zsh or ...)
