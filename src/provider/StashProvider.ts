@@ -8,21 +8,24 @@ import {
 } from '../main';
 import { itemTransformer } from '../util/ItermUtil';
 import { DefaultRestClient } from '../service/DefaultRestClient';
+import { BaseProvider } from './BaseProvider';
 
-export class StashProvider implements Provider {
+export class StashProvider extends BaseProvider {
     readonly client!: RestClient;
     readonly store!: Store;
     readonly instance!: UrlParts;
 
     constructor(instance: UrlParts, token: string, store: Store) {
-        this.store = store;
-        this.client = new DefaultRestClient({
-            host: instance.host,
-            port: instance.port,
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        super(
+            store,
+            new DefaultRestClient({
+                host: instance.host,
+                port: instance.port,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        );
     }
 
     _extractConnectionUrls(
@@ -42,28 +45,9 @@ export class StashProvider implements Provider {
             }));
     }
 
-    register(options: ProviderOptions): void {
-        console.log(options);
-        const { workspace, namespace } = options;
-        if (!namespace) {
-            return;
-        }
-        this.client
-            ._get(`/rest/api/1.0/projects/${namespace}/repos`)
-            .then((json) =>
-                this._extractConnectionUrls(json, workspace, namespace)
-            )
-            .then((items) => {
-                items
-                    .map((input) => itemTransformer(input))
-                    .forEach((item) => {
-                        if (item) {
-                            this.store.add(item);
-                        }
-                    });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    _sendRequest(options: ProviderOptions): Promise<any> {
+        return this.client._get(
+            `/rest/api/1.0/projects/${options.namespace}/repos`
+        );
     }
 }

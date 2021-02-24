@@ -1,16 +1,18 @@
 import { Input, Provider, ProviderOptions, RestClient, Store } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
-import { itemTransformer } from '../util/ItermUtil';
+import { BaseProvider } from './BaseProvider';
 
-export class GitHubProvider implements Provider {
+export class GitHubProvider extends BaseProvider {
     readonly client!: RestClient;
     readonly store!: Store;
 
     constructor(store: Store) {
-        this.store = store;
-        this.client = new DefaultRestClient({
-            host: 'api.github.com'
-        });
+        super(
+            store,
+            new DefaultRestClient({
+                host: 'api.github.com'
+            })
+        );
     }
 
     _extractConnectionUrls(
@@ -25,28 +27,7 @@ export class GitHubProvider implements Provider {
         }));
     }
 
-    register(options: ProviderOptions): void {
-        console.log(options);
-        const { workspace, namespace } = options;
-        if (!namespace) {
-            return;
-        }
-        this.client
-            ._get(`/users/${namespace}/repos`)
-            .then((json) =>
-                this._extractConnectionUrls(json, workspace, namespace)
-            )
-            .then((items) => {
-                items
-                    .map((input) => itemTransformer(input))
-                    .forEach((item) => {
-                        if (item) {
-                            this.store.add(item);
-                        }
-                    });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    _sendRequest(options: ProviderOptions): Promise<any> {
+        return this.client._get(`/users/${options.namespace}/repos`);
     }
 }

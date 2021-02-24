@@ -1,23 +1,18 @@
-import {
-    Input,
-    Provider,
-    ProviderOptions,
-    RestClient,
-    Store,
-    UrlParts
-} from '../main';
+import { Input, ProviderOptions, RestClient, Store } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
-import { itemTransformer } from '../util/ItermUtil';
+import { BaseProvider } from './BaseProvider';
 
-export class BitbucketProvider implements Provider {
+export class BitbucketProvider extends BaseProvider {
     readonly client!: RestClient;
     readonly store!: Store;
 
     constructor(store: Store) {
-        this.store = store;
-        this.client = new DefaultRestClient({
-            host: 'api.bitbucket.org'
-        });
+        super(
+            store,
+            new DefaultRestClient({
+                host: 'api.bitbucket.org'
+            })
+        );
     }
 
     _extractConnectionUrls(
@@ -37,28 +32,7 @@ export class BitbucketProvider implements Provider {
             }));
     }
 
-    register(options: ProviderOptions): void {
-        console.log(options);
-        const { workspace, namespace } = options;
-        if (!namespace) {
-            return;
-        }
-        this.client
-            ._get(`/2.0/repositories/${namespace}`)
-            .then((json) =>
-                this._extractConnectionUrls(json, workspace, namespace)
-            )
-            .then((items) => {
-                items
-                    .map((input) => itemTransformer(input))
-                    .forEach((item) => {
-                        if (item) {
-                            this.store.add(item);
-                        }
-                    });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    _sendRequest(options: ProviderOptions): Promise<any> {
+        return this.client._get(`/2.0/repositories/${options.namespace}`);
     }
 }
