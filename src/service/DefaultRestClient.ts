@@ -12,7 +12,7 @@ export class DefaultRestClient implements RestClient {
         this.headers = options.headers || {};
     }
 
-    _get(target: string, workspace: string): Promise<Array<Item>> {
+    _get(target: string): Promise<Array<Item>> {
         return new Promise<Array<Item>>((resolve) => {
             const settings = {
                 path: target,

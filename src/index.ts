@@ -10,6 +10,7 @@ import { Input, Item, Options } from './main';
 import { DefaultService } from './service/DefaultService';
 import { CloneCommand } from './command/CloneCommand';
 import { StashProvider } from './provider/StashProvider';
+import { BitbucketProvider } from './provider/BitbucketProvider';
 
 // configuration handlers
 
@@ -82,12 +83,14 @@ commander
             workspace: commander.workspace,
             aliases: aliases
         };
-        itemTransformer(input).then((item: Item) => {
-            store.add(item);
-            console.log(
-                `registered on workspace: ${item.workspace} / ${item.connection}`
-            );
-        });
+        const item = itemTransformer(input);
+        if (!item) {
+            return;
+        }
+        store.add(item);
+        console.log(
+            `registered on workspace: ${item.workspace} / ${item.connection}`
+        );
     });
 
 commander
@@ -150,6 +153,18 @@ commander
                 workspace: workspace,
                 namespace: project
             });
+        });
+    });
+
+commander
+    .command('bitbucket <namespace>')
+    .description('register repos from bitbucket with given namespace')
+    .action((namespace) => {
+        const { workspace } = commander;
+        const bitbucketProvider = new BitbucketProvider(store);
+        bitbucketProvider.register({
+            workspace: workspace,
+            namespace: namespace
         });
     });
 

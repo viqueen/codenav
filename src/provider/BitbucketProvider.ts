@@ -6,22 +6,17 @@ import {
     Store,
     UrlParts
 } from '../main';
-import { itemTransformer } from '../service/ItermUtil';
 import { DefaultRestClient } from '../service/DefaultRestClient';
+import { itemTransformer } from '../service/ItermUtil';
 
-export class StashProvider implements Provider {
+export class BitbucketProvider implements Provider {
     readonly client!: RestClient;
     readonly store!: Store;
-    readonly instance!: UrlParts;
 
-    constructor(instance: UrlParts, token: string, store: Store) {
+    constructor(store: Store) {
         this.store = store;
         this.client = new DefaultRestClient({
-            host: instance.host,
-            port: instance.port,
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+            host: 'api.bitbucket.org'
         });
     }
 
@@ -30,8 +25,8 @@ export class StashProvider implements Provider {
         workspace: string,
         namespace: string
     ): Array<Input> {
+        console.log(json);
         return json.values
-            .filter((item: any) => item.project.key === namespace)
             .flatMap((item: any) => item.links.clone)
             .filter((item: any) => item.name === 'ssh')
             .map((item: any) => item.href)
@@ -49,7 +44,7 @@ export class StashProvider implements Provider {
             return;
         }
         this.client
-            ._get(`/rest/api/1.0/projects/${namespace}/repos`)
+            ._get(`/2.0/repositories/${namespace}`)
             .then((json) =>
                 this._extractConnectionUrls(json, workspace, namespace)
             )

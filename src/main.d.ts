@@ -39,7 +39,7 @@ interface Input {
 }
 
 interface ItemTransformer {
-    (input: Input): Promise<Item>;
+    (input: Input): Item | undefined;
 }
 
 interface Options {
@@ -69,7 +69,7 @@ interface RestClientOptions {
 }
 
 interface RestClient extends RestClientOptions {
-    _get(target: string, workspace: string): Promise<any>;
+    _get(target: string): Promise<any>;
 }
 
 interface ProviderOptions {
@@ -78,10 +78,14 @@ interface ProviderOptions {
 }
 
 interface Provider {
-    readonly instance: UrlParts;
     readonly store: Store;
     readonly client: RestClient;
 
+    _extractConnectionUrls(
+        json: any,
+        workspace: string,
+        namespace: string
+    ): Array<Input>;
     register(options: ProviderOptions): void;
 }
 
