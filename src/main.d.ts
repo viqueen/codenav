@@ -69,7 +69,7 @@ interface RestClientOptions {
 }
 
 interface RestClient extends RestClientOptions {
-    _get(target: string): Promise<any>;
+    _get(target: string, query: any): Promise<any>;
 }
 
 interface ProviderOptions {
@@ -86,6 +86,7 @@ interface Provider {
         workspace: string,
         namespace: string
     ): Array<Input>;
+
     register(options: ProviderOptions): void;
 }
 
@@ -100,4 +101,9 @@ interface UrlParts {
 
 interface UrlParser {
     (url: string): Promise<UrlParts>;
+}
+
+interface Page {
+    readonly data: any;
+    readonly next?: any;
 }

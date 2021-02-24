@@ -1,4 +1,4 @@
-import { Input, Provider, ProviderOptions, RestClient, Store } from '../main';
+import { Input, Page, ProviderOptions, RestClient, Store } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
 import { BaseProvider } from './BaseProvider';
 
@@ -27,7 +27,16 @@ export class GitHubProvider extends BaseProvider {
         }));
     }
 
-    _sendRequest(options: ProviderOptions): Promise<any> {
-        return this.client._get(`/users/${options.namespace}/repos`);
+    _sendRequest(
+        options: ProviderOptions,
+        query: any | undefined
+    ): Promise<Page> {
+        // TODO : handle paging
+        return this.client
+            ._get(`/users/${options.namespace}/repos`, query)
+            .then((response) => ({
+                data: response,
+                next: undefined
+            }));
     }
 }

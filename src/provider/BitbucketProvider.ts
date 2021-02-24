@@ -1,4 +1,4 @@
-import { Input, ProviderOptions, RestClient, Store } from '../main';
+import { Input, Page, ProviderOptions, RestClient, Store } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
 import { BaseProvider } from './BaseProvider';
 
@@ -32,7 +32,16 @@ export class BitbucketProvider extends BaseProvider {
             }));
     }
 
-    _sendRequest(options: ProviderOptions): Promise<any> {
-        return this.client._get(`/2.0/repositories/${options.namespace}`);
+    _sendRequest(
+        options: ProviderOptions,
+        query: any | undefined
+    ): Promise<Page> {
+        // TODO : handle paging
+        return this.client
+            ._get(`/2.0/repositories/${options.namespace}`, query)
+            .then((response) => ({
+                data: response,
+                next: undefined
+            }));
     }
 }

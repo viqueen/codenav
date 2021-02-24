@@ -1,13 +1,22 @@
-import { Input, Provider, ProviderOptions, RestClient, Store } from '../main';
+import {
+    Input,
+    Page,
+    Provider,
+    ProviderOptions,
+    RestClient,
+    Store
+} from '../main';
 import { itemTransformer } from '../util/ItermUtil';
 
 export class BaseProvider implements Provider {
     readonly client!: RestClient;
     readonly store!: Store;
+    readonly initialQuery!: any;
 
-    constructor(store: Store, client: RestClient) {
+    constructor(store: Store, client: RestClient, initialQuery: any = {}) {
         this.store = store;
         this.client = client;
+        this.initialQuery = initialQuery;
     }
 
     _extractConnectionUrls(
@@ -18,27 +27,30 @@ export class BaseProvider implements Provider {
         throw new Error();
     }
 
-    _sendRequest(options: ProviderOptions): Promise<any> {
+    _sendRequest(
+        options: ProviderOptions,
+        query: any | undefined
+    ): Promise<Page> {
         throw new Error();
     }
 
     register(options: ProviderOptions): void {
         const { workspace, namespace } = options;
-        this._sendRequest(options)
-            .then((json) =>
-                this._extractConnectionUrls(json, workspace, namespace)
-            )
-            .then((items) => {
-                items
+        this._sendRequest(options, this.initialQuery)
+            .then((page) => {
+                const { data, next } = page;
+                this._extractConnectionUrls(data, workspace, namespace)
                     .map((input) => itemTransformer(input))
                     .forEach((item) => {
                         if (item) {
                             this.store.add(item);
                         }
                     });
+                return next;
             })
-            .catch((error) => {
-                console.log(error);
-            });
+            .then((query) => {
+                return this._sendRequest(options, query);
+            })
+            .catch(() => {});
     }
 }

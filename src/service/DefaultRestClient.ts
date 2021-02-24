@@ -1,5 +1,6 @@
 import { Item, RestClient, RestClientOptions } from '../main';
 import * as https from 'https';
+import * as QueryString from 'query-string';
 
 export class DefaultRestClient implements RestClient {
     readonly host!: string;
@@ -12,10 +13,10 @@ export class DefaultRestClient implements RestClient {
         this.headers = options.headers || {};
     }
 
-    _get(target: string): Promise<Array<Item>> {
+    _get(target: string, query: any = {}): Promise<Array<Item>> {
         return new Promise<Array<Item>>((resolve) => {
             const settings = {
-                path: target,
+                path: `${target}?${QueryString.stringify(query)}`,
                 host: this.host,
                 port: this.port,
                 headers: Object.assign({}, this.headers, {

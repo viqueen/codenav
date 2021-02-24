@@ -1,5 +1,6 @@
 import {
     Input,
+    Page,
     Provider,
     ProviderOptions,
     RestClient,
@@ -24,7 +25,8 @@ export class StashProvider extends BaseProvider {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            })
+            }),
+            { start: 0, limit: 100 }
         );
     }
 
@@ -45,9 +47,24 @@ export class StashProvider extends BaseProvider {
             }));
     }
 
-    _sendRequest(options: ProviderOptions): Promise<any> {
-        return this.client._get(
-            `/rest/api/1.0/projects/${options.namespace}/repos`
-        );
+    _sendRequest(
+        options: ProviderOptions,
+        query: any | undefined
+    ): Promise<Page> {
+        if (!query) {
+            throw new Error();
+        }
+        console.log(query);
+        return this.client
+            ._get(`/rest/api/1.0/projects/${options.namespace}/repos`, query)
+            .then((response) => {
+                const nextQuery = response.isLasPage
+                    ? undefined
+                    : { start: response.nextPageStart, limit: 100 };
+                return {
+                    data: response,
+                    next: nextQuery
+                };
+            });
     }
 }
