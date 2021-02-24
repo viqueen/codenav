@@ -39,3 +39,11 @@ interface Input {
 interface ItemTransformer {
     (input: Input): Promise<Item>;
 }
+
+interface Options {
+    readonly workspace?: string;
+    readonly namespace?: string;
+    readonly host?: string;
+    readonly slug?: string;
+    readonly keyword?: string;
+}
