@@ -42,6 +42,11 @@ interface ItemTransformer {
     (input: Input): Item | undefined;
 }
 
+interface ItemLocation {
+    readonly configuration: Configuration;
+    resolve(item: Item): string;
+}
+
 interface Options {
     readonly workspace?: string;
     readonly namespace?: string;
@@ -51,6 +56,7 @@ interface Options {
 }
 
 interface ItemCommand {
+    readonly location: ItemLocation;
     make(item: Item): Task;
 }
 

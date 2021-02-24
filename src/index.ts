@@ -12,6 +12,8 @@ import { CloneCommand } from './command/CloneCommand';
 import { StashProvider } from './provider/StashProvider';
 import { BitbucketProvider } from './provider/BitbucketProvider';
 import { GitHubProvider } from './provider/GitHubProvider';
+import { DefaultItemLocation } from './util/DefaultItemLocation';
+import { ExecCommand } from './command/ExecCommand';
 
 // configuration handlers
 
@@ -45,6 +47,7 @@ commander
 
 const store = new LevelDBStore(configuration);
 const service = new DefaultService(store);
+const location = new DefaultItemLocation(configuration);
 
 const options = () => {
     const { workspace, host, namespace, slug, keyword } = commander;
@@ -119,12 +122,24 @@ commander
             });
     });
 
+// operations
+
 commander
     .command('clone')
     .description('clone registered repos')
     .action(() => {
         service.execute(
             new CloneCommand(configuration.get('sources.root')),
+            (item: Item) => itemFilter(item, options())
+        );
+    });
+
+commander
+    .command('exec <executableFile> [args...]')
+    .description('execute script on target repos')
+    .action((executableFile, args) => {
+        service.execute(
+            new ExecCommand(executableFile, args, location),
             (item: Item) => itemFilter(item, options())
         );
     });

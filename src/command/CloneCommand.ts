@@ -1,21 +1,16 @@
-import { Item, ItemCommand } from '../main';
+import { Item, ItemCommand, ItemLocation } from '../main';
 import { Task } from 'task-pool-executor';
 import simpleGit from 'simple-git';
-import path from 'path';
 
 export class CloneCommand implements ItemCommand {
-    readonly sourcesRoot!: string;
+    readonly location!: ItemLocation;
 
-    constructor(sourcesRoot: string) {
-        this.sourcesRoot = sourcesRoot;
+    constructor(location: ItemLocation) {
+        this.location = location;
     }
 
     make(item: Item): Task {
-        const target = path.resolve(
-            this.sourcesRoot,
-            item.workspace,
-            item.slug
-        );
+        const target = this.location.resolve(item);
         return () =>
             simpleGit()
                 .clone(item.connection, target)
