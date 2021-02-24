@@ -20,8 +20,8 @@ const httpsItem = {
     workspace: 'tools'
 };
 
-test('can extract item details from ssh connection', async () => {
-    const parsedItem = await itemTransformer({
+test('can extract item details from ssh connection', () => {
+    const parsedItem = itemTransformer({
         connection: sshItem.connection,
         workspace: sshItem.workspace,
         aliases: []
@@ -29,8 +29,8 @@ test('can extract item details from ssh connection', async () => {
     expect(parsedItem).toEqual(sshItem);
 });
 
-test('can extract item details from https connection', async () => {
-    const parsedItem = await itemTransformer({
+test('can extract item details from https connection', () => {
+    const parsedItem = itemTransformer({
         connection: httpsItem.connection,
         workspace: httpsItem.workspace,
         aliases: []
@@ -38,34 +38,33 @@ test('can extract item details from https connection', async () => {
     expect(parsedItem).toEqual(httpsItem);
 });
 
-test('can aggregate aliases', async () => {
-    const parsedItem = await itemTransformer({
+test('can aggregate aliases', () => {
+    const parsedItem = itemTransformer({
         connection: httpsItem.connection,
         workspace: httpsItem.workspace,
         aliases: ['devtools', 'development', 'automation']
     });
-    expect(parsedItem.aliases).toEqual([
-        'devtools',
-        'development',
-        'automation',
-        'devbox'
-    ]);
+    expect(parsedItem).toMatchObject({
+        aliases: ['devtools', 'development', 'automation', 'devbox']
+    });
 });
 
-test('aliases are not duplicated', async () => {
-    const parsedItem = await itemTransformer({
+test('aliases are not duplicated', () => {
+    const parsedItem = itemTransformer({
         connection: httpsItem.connection,
         workspace: httpsItem.workspace,
         aliases: ['devbox']
     });
-    expect(parsedItem.aliases).toEqual(['devbox']);
+    expect(parsedItem).toMatchObject({
+        aliases: ['devbox']
+    });
 });
 
-test('does not process invalid connection urls', async () => {
+test('does not process invalid connection urls', () => {
     const result = itemTransformer({
         connection: 'invalid.git',
         workspace: 'default',
         aliases: []
     });
-    await expect(result).rejects.toBeUndefined();
+    expect(result).toBeUndefined();
 });
