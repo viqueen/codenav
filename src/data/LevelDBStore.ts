@@ -1,7 +1,7 @@
 import LevelUp from 'levelup';
 import path from 'path';
 import LevelDOWN from 'leveldown';
-import __ from 'lodash/fp/__';
+import __ from 'lodash';
 import { Configuration, Item, ItemFilter, Store } from '../main';
 
 export class LevelDBStore implements Store {
