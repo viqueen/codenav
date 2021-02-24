@@ -5,10 +5,13 @@ import { JsonFileConfiguration } from './data/JsonFileConfiguration';
 import { homedir } from 'os';
 import path from 'path';
 import { LevelDBStore } from './data/LevelDBStore';
-import { itemTransformer } from './service/ItermUtil';
+import { itemTransformer, urlParser } from './util/ItermUtil';
 import { Input, Item, Options } from './main';
 import { DefaultService } from './service/DefaultService';
 import { CloneCommand } from './command/CloneCommand';
+import { StashProvider } from './provider/StashProvider';
+import { BitbucketProvider } from './provider/BitbucketProvider';
+import { GitHubProvider } from './provider/GitHubProvider';
 
 // configuration handlers
 
@@ -81,12 +84,14 @@ commander
             workspace: commander.workspace,
             aliases: aliases
         };
-        itemTransformer(input).then((item: Item) => {
-            store.add(item);
-            console.log(
-                `registered on workspace: ${item.workspace} / ${item.connection}`
-            );
-        });
+        const item = itemTransformer(input);
+        if (!item) {
+            return;
+        }
+        store.add(item);
+        console.log(
+            `registered on workspace: ${item.workspace} / ${item.connection}`
+        );
     });
 
 commander
@@ -122,6 +127,58 @@ commander
             new CloneCommand(configuration.get('sources.root')),
             (item: Item) => itemFilter(item, options())
         );
+    });
+
+// source providers
+
+commander
+    .command('stash <project>')
+    .description('register repos from stash for a given project')
+    .action((project) => {
+        const url = configuration.get(`stash.url`);
+        const token = configuration.get(`stash.token`);
+
+        if (!url || !token) {
+            console.log(`please set stash.url and stash.token properties`);
+            console.log(`
+            cnav set-config stash.url <value>
+            cnav set-config stash.token <value>
+            `);
+            return;
+        }
+
+        const { workspace } = commander;
+        urlParser(url).then((parts) => {
+            const stashProvider = new StashProvider(parts, token, store);
+            stashProvider.register({
+                workspace: workspace,
+                namespace: project
+            });
+        });
+    });
+
+commander
+    .command('bitbucket <namespace>')
+    .description('register repos from bitbucket with given namespace')
+    .action((namespace) => {
+        const { workspace } = commander;
+        const bitbucketProvider = new BitbucketProvider(store);
+        bitbucketProvider.register({
+            workspace: workspace,
+            namespace: namespace
+        });
+    });
+
+commander
+    .command('github <namespace>')
+    .description('register repos from github with given namespace')
+    .action((namespace) => {
+        const { workspace } = commander;
+        const githubProvider = new GitHubProvider(store);
+        githubProvider.register({
+            workspace: workspace,
+            namespace: namespace
+        });
     });
 
 commander.version('2.0.0');

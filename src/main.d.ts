@@ -39,7 +39,7 @@ interface Input {
 }
 
 interface ItemTransformer {
-    (input: Input): Promise<Item>;
+    (input: Input): Item | undefined;
 }
 
 interface Options {
@@ -58,4 +58,52 @@ interface Service {
     readonly executor: TaskExecutor;
     readonly store: Store;
     execute(command: ItemCommand, filter: ItemFilter): void;
+}
+
+// source providers
+
+interface RestClientOptions {
+    readonly host: string;
+    readonly port?: string;
+    readonly headers?: any;
+}
+
+interface RestClient extends RestClientOptions {
+    _get(target: string, query: any): Promise<any>;
+}
+
+interface ProviderOptions {
+    readonly workspace: string;
+    readonly namespace: string;
+}
+
+interface Provider {
+    readonly store: Store;
+    readonly client: RestClient;
+
+    _extractConnectionUrls(
+        json: any,
+        workspace: string,
+        namespace: string
+    ): Array<Input>;
+
+    register(options: ProviderOptions): void;
+}
+
+// util
+
+interface UrlParts {
+    readonly protocol: string;
+    readonly host: string;
+    readonly port?: string;
+    readonly context: string;
+}
+
+interface UrlParser {
+    (url: string): Promise<UrlParts>;
+}
+
+interface Page {
+    readonly data: any;
+    readonly next?: any;
 }
