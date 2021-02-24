@@ -6,7 +6,7 @@ import {
     Store,
     UrlParts
 } from '../main';
-import { itemTransformer } from '../service/ItermUtil';
+import { itemTransformer } from '../util/ItermUtil';
 import { DefaultRestClient } from '../service/DefaultRestClient';
 
 export class StashProvider implements Provider {

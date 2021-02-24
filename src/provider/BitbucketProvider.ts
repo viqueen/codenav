@@ -7,7 +7,7 @@ import {
     UrlParts
 } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
-import { itemTransformer } from '../service/ItermUtil';
+import { itemTransformer } from '../util/ItermUtil';
 
 export class BitbucketProvider implements Provider {
     readonly client!: RestClient;

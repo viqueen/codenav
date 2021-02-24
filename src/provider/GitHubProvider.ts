@@ -1,6 +1,6 @@
 import { Input, Provider, ProviderOptions, RestClient, Store } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
-import { itemTransformer } from '../service/ItermUtil';
+import { itemTransformer } from '../util/ItermUtil';
 
 export class GitHubProvider implements Provider {
     readonly client!: RestClient;
