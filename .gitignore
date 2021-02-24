@@ -1,4 +1,4 @@
 node_modules/
-.cnav-db-*/
+.cnav-db/
 dist/
 coverage/
