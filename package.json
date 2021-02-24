@@ -1,6 +1,6 @@
 {
   "name": "codenav",
-  "version": "2.0.0-m04",
+  "version": "2.0.0-m05",
   "description": "code navigation",
   "bin": {
     "cnav": "./dist/index.js"
@@ -53,6 +53,7 @@
     "commander": "^6.0.0",
     "leveldown": "^5.6.0",
     "levelup": "^4.4.0",
+    "lodash": "^4.17.21",
     "query-string": "^6.13.6",
     "simple-git": "^2.35.2",
     "task-pool-executor": "^1.0.3"
