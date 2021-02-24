@@ -5,10 +5,11 @@ import { JsonFileConfiguration } from './data/JsonFileConfiguration';
 import { homedir } from 'os';
 import path from 'path';
 import { LevelDBStore } from './data/LevelDBStore';
-import { itemTransformer } from './service/ItermUtil';
+import { itemTransformer, urlParser } from './service/ItermUtil';
 import { Input, Item, Options } from './main';
 import { DefaultService } from './service/DefaultService';
 import { CloneCommand } from './command/CloneCommand';
+import { StashProvider } from './provider/StashProvider';
 
 // configuration handlers
 
@@ -122,6 +123,34 @@ commander
             new CloneCommand(configuration.get('sources.root')),
             (item: Item) => itemFilter(item, options())
         );
+    });
+
+// source providers
+
+commander
+    .command('stash <project>')
+    .description('register repos from stash for a given project')
+    .action((project) => {
+        const url = configuration.get(`stash.url`);
+        const token = configuration.get(`stash.token`);
+
+        if (!url || !token) {
+            console.log(`please set stash.url and stash.token properties`);
+            console.log(`
+            cnav set-config stash.url <value>
+            cnav set-config stash.token <value>
+            `);
+            return;
+        }
+
+        const { workspace } = commander;
+        urlParser(url).then((parts) => {
+            const stashProvider = new StashProvider(parts, token, store);
+            stashProvider.register({
+                workspace: workspace,
+                namespace: project
+            });
+        });
     });
 
 commander.version('2.0.0');

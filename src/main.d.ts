@@ -59,3 +59,41 @@ interface Service {
     readonly store: Store;
     execute(command: ItemCommand, filter: ItemFilter): void;
 }
+
+// source providers
+
+interface RestClientOptions {
+    readonly host: string;
+    readonly port?: string;
+    readonly headers?: any;
+}
+
+interface RestClient extends RestClientOptions {
+    _get(target: string, workspace: string): Promise<any>;
+}
+
+interface ProviderOptions {
+    readonly workspace: string;
+    readonly namespace?: string;
+}
+
+interface Provider {
+    readonly instance: UrlParts;
+    readonly store: Store;
+    readonly client: RestClient;
+
+    register(options: ProviderOptions): void;
+}
+
+// util
+
+interface UrlParts {
+    readonly protocol: string;
+    readonly host: string;
+    readonly port?: string;
+    readonly context: string;
+}
+
+interface UrlParser {
+    (url: string): Promise<UrlParts>;
+}
