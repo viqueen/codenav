@@ -1,3 +1,7 @@
+// data
+
+import { Task, TaskExecutor } from 'task-pool-executor';
+
 interface Item {
     readonly ID: string;
     readonly connection: string;
@@ -24,4 +28,34 @@ interface Store {
     get(key: string): Promise<Item>;
     remove(filter: ItemFilter): Promise<Array<Item>>;
     list(filter: ItemFilter): Promise<Array<Item>>;
+}
+
+// CLI
+
+interface Input {
+    readonly connection: string;
+    readonly workspace: string;
+    readonly aliases: Array<string>;
+}
+
+interface ItemTransformer {
+    (input: Input): Promise<Item>;
+}
+
+interface Options {
+    readonly workspace?: string;
+    readonly namespace?: string;
+    readonly host?: string;
+    readonly slug?: string;
+    readonly keyword?: string;
+}
+
+interface ItemCommand {
+    make(item: Item): Task;
+}
+
+interface Service {
+    readonly executor: TaskExecutor;
+    readonly store: Store;
+    execute(command: ItemCommand, filter: ItemFilter): void;
 }

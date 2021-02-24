@@ -1,4 +1,5 @@
 import { LevelDBStore } from './LevelDBStore';
+import { Configuration, Item } from '../main';
 
 const configuration: Configuration = {
     directory: process.cwd(),

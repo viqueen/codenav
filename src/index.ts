@@ -5,13 +5,16 @@ import { JsonFileConfiguration } from './data/JsonFileConfiguration';
 import { homedir } from 'os';
 import path from 'path';
 import { LevelDBStore } from './data/LevelDBStore';
+import { itemTransformer } from './service/ItermUtil';
+import { Input, Item, Options } from './main';
+import { DefaultService } from './service/DefaultService';
+import { CloneCommand } from './command/CloneCommand';
+
+// configuration handlers
 
 const configuration = new JsonFileConfiguration(
     path.resolve(homedir(), '.cnav')
 );
-const store = new LevelDBStore(configuration);
-
-// configuration handlers
 
 commander
     .command('config')
@@ -33,6 +36,92 @@ commander
     .description('gets cnav configuration entry')
     .action((key) => {
         console.log(configuration.get(key));
+    });
+
+// repo handlers
+
+const store = new LevelDBStore(configuration);
+const service = new DefaultService(store);
+
+const options = () => {
+    const { workspace, host, namespace, slug, keyword } = commander;
+    return {
+        workspace,
+        host,
+        namespace,
+        slug,
+        keyword
+    };
+};
+
+const itemFilter = (item: Item, opts: Options) => {
+    return (
+        (opts.host ? opts.host === item.host : true) &&
+        (opts.namespace ? opts.namespace === item.namespace : true) &&
+        (opts.workspace ? opts.workspace === item.workspace : true) &&
+        (opts.keyword
+            ? item.slug.includes(opts.keyword) ||
+              item.aliases.includes(opts.keyword)
+            : true)
+    );
+};
+
+commander.option('-w, --workspace <name>', 'filter by workspace', 'default');
+commander.option('-h, --host <name>', 'filter by host');
+commander.option('-ns, --namespace <name>', 'filter by namespace');
+commander.option('-s, --slug <name>', 'filter by name/slug');
+commander.option('-k, --keyword <keyword>', 'filter by keyword');
+
+commander
+    .command('register <urlConnection> [aliases...]')
+    .description('registers a new repo using its url connection')
+    .action((urlConnection, aliases) => {
+        const input: Input = {
+            connection: urlConnection,
+            workspace: commander.workspace,
+            aliases: aliases
+        };
+        itemTransformer(input).then((item: Item) => {
+            store.add(item);
+            console.log(
+                `registered on workspace: ${item.workspace} / ${item.connection}`
+            );
+        });
+    });
+
+commander
+    .command('list')
+    .description('lists registered repos')
+    .action(() => {
+        store
+            .list((item: Item) => itemFilter(item, options()))
+            .then((items) => {
+                items.forEach((item) => console.log(item));
+            });
+    });
+
+commander
+    .command('remove')
+    .description('removes registered repos')
+    .action(() => {
+        store
+            .remove((item: Item) => itemFilter(item, options()))
+            .then((items) => {
+                console.log('removed items:');
+                items
+                    .map((item) => item.ID)
+                    .forEach((item) => console.log(item));
+            });
+    });
+
+commander
+    .command('clone')
+    .description('clone registered repos')
+    .action(() => {
+        service.execute(
+            new CloneCommand(configuration.get('sources.root')),
+            (item: Item) => itemFilter(item, options())
+        );
     });
 
 commander.version('2.0.0');

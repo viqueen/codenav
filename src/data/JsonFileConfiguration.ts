@@ -1,6 +1,7 @@
 import path from 'path';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { homedir } from 'os';
+import { Configuration } from '../main';
 
 export class JsonFileConfiguration implements Configuration {
     readonly directory!: string;
