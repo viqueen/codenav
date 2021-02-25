@@ -7,7 +7,7 @@ import { Configuration, Item, ItemFilter, Store } from '../main';
 export class LevelDBStore implements Store {
     readonly configuration!: Configuration;
     // @ts-ignore
-    readonly db!: LevelUp;
+    private db!: LevelUp;
 
     constructor(configuration: Configuration) {
         this.configuration = configuration;
