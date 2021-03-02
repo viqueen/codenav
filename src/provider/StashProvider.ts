@@ -58,9 +58,10 @@ export class StashProvider extends BaseProvider {
         return this.client
             ._get(`/rest/api/1.0/projects/${options.namespace}/repos`, query)
             .then((response) => {
-                const nextQuery = response.isLasPage
-                    ? undefined
-                    : { start: response.nextPageStart, limit: 100 };
+                const nextQuery =
+                    response.isLastPage === true
+                        ? undefined
+                        : { start: response.nextPageStart, limit: 100 };
                 return {
                     data: response,
                     next: nextQuery

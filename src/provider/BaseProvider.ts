@@ -34,23 +34,34 @@ export class BaseProvider implements Provider {
         throw new Error();
     }
 
-    register(options: ProviderOptions): void {
+    _handle(options: ProviderOptions, query: any) {
+        if (!query) {
+            throw new Error();
+        }
         const { workspace, namespace } = options;
-        this._sendRequest(options, this.initialQuery)
+        this._sendRequest(options, query)
             .then((page) => {
                 const { data, next } = page;
                 this._extractConnectionUrls(data, workspace, namespace)
                     .map((input) => itemTransformer(input))
                     .forEach((item) => {
                         if (item) {
+                            // noinspection JSIgnoredPromiseFromCall
                             this.store.add(item);
+                            console.log(
+                                `registered on workspace: ${item.workspace} / ${item.connection}`
+                            );
                         }
                     });
                 return next;
             })
-            .then((query) => {
-                return this._sendRequest(options, query);
+            .then((nextQuery) => {
+                return this._handle(options, nextQuery);
             })
             .catch(() => {});
+    }
+
+    register(options: ProviderOptions): void {
+        this._handle(options, this.initialQuery);
     }
 }
