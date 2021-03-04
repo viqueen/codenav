@@ -136,9 +136,8 @@ commander
     .command('clone')
     .description('clone registered repos')
     .action(() => {
-        service.execute(
-            new CloneCommand(configuration.get('sources.root')),
-            (item: Item) => itemFilter(item, options())
+        service.execute(new CloneCommand(location), (item: Item) =>
+            itemFilter(item, options())
         );
     });
 
