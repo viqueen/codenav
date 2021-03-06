@@ -180,7 +180,8 @@ commander
             const stashProvider = new StashProvider(parts, token, store);
             stashProvider.register({
                 workspace: workspace,
-                namespace: project
+                namespace: project,
+                itemFilter: (item: Item) => itemFilter(item, options())
             });
         });
     });
@@ -193,7 +194,8 @@ commander
         const bitbucketProvider = new BitbucketProvider(store);
         bitbucketProvider.register({
             workspace: workspace,
-            namespace: namespace
+            namespace: namespace,
+            itemFilter: (item: Item) => itemFilter(item, options())
         });
     });
 
@@ -205,7 +207,8 @@ commander
         const githubProvider = new GitHubProvider(store);
         githubProvider.register({
             workspace: workspace,
-            namespace: namespace
+            namespace: namespace,
+            itemFilter: (item: Item) => itemFilter(item, options())
         });
     });
 

@@ -45,7 +45,7 @@ export class BaseProvider implements Provider {
                 this._extractConnectionUrls(data, workspace, namespace)
                     .map((input) => itemTransformer(input))
                     .forEach((item) => {
-                        if (item) {
+                        if (item && options.itemFilter(item)) {
                             // noinspection JSIgnoredPromiseFromCall
                             this.store.add(item);
                             console.log(

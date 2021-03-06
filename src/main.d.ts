@@ -96,6 +96,7 @@ interface RestClient extends RestClientOptions {
 interface ProviderOptions {
     readonly workspace: string;
     readonly namespace: string;
+    readonly itemFilter: ItemFilter;
 }
 
 interface Provider {
