@@ -1,6 +1,8 @@
+import { URL } from 'url';
 import { Input, Page, ProviderOptions, RestClient, Store } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
 import { BaseProvider } from './BaseProvider';
+import QueryString from 'query-string';
 
 export class BitbucketProvider extends BaseProvider {
     readonly client!: RestClient;
@@ -20,8 +22,7 @@ export class BitbucketProvider extends BaseProvider {
         workspace: string,
         namespace: string
     ): Array<Input> {
-        console.log(json);
-        return json.values
+        return json
             .flatMap((item: any) => item.links.clone)
             .filter((item: any) => item.name === 'ssh')
             .map((item: any) => item.href)
@@ -36,13 +37,22 @@ export class BitbucketProvider extends BaseProvider {
         options: ProviderOptions,
         query: any | undefined
     ): Promise<Page> {
-        // TODO : handle paging
+        console.log(query);
         return this.client
             ._get(`/2.0/repositories/${options.namespace}`, query)
             .then((response) => response.body)
-            .then((response) => ({
-                data: response,
-                next: undefined
-            }));
+            .then((body) => {
+                const next =
+                    body.next && body.next !== ''
+                        ? new URL(body.next)
+                        : undefined;
+                const nextQuery = next
+                    ? QueryString.parse(next.search)
+                    : undefined;
+                return {
+                    data: body.values,
+                    next: nextQuery
+                };
+            });
     }
 }
