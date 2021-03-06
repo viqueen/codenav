@@ -1,4 +1,13 @@
-import { Input, ItemTransformer, UrlParser, UrlParts } from '../main';
+import {
+    Input,
+    ItemTransformer,
+    Link,
+    LinkParser,
+    UrlParser,
+    UrlParts
+} from '../main';
+import QueryString from 'query-string';
+import { URL } from 'url';
 
 const SSH_URL_PATTERN = /^(?<protocol>ssh:\/\/)?(?<user>[a-zA-Z0-9]+)@(?<host>[a-zA-Z0-9.]+(:[0-9]+)?)([\/:])(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
 const HTTPS_URL_PATTERN = /^(?<protocol>https:\/\/)(?<host>[a-zA-Z0-9.]+)\/(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
@@ -55,4 +64,22 @@ const urlParser: UrlParser = (url: string) => {
     });
 };
 
-export { itemTransformer, urlParser };
+const LINK_PATTERN = /^<(?<href>.*)>; rel="(?<rel>next|last)"$/;
+
+const linkParser: LinkParser = (link: string) => {
+    const matcher = link.match(LINK_PATTERN);
+
+    if (!matcher) {
+        return;
+    }
+
+    const groups = matcher.groups || {};
+    const href = groups['href'];
+    return {
+        href: href,
+        rel: groups['rel'],
+        query: QueryString.parse(new URL(href).search)
+    };
+};
+
+export { itemTransformer, urlParser, linkParser };

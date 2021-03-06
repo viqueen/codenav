@@ -1,4 +1,4 @@
-import { itemTransformer } from './ItermUtil';
+import { itemTransformer, linkParser } from './ItermUtil';
 
 const sshItem = {
     ID: 'tools/viqueen/codenav',
@@ -67,4 +67,16 @@ test('does not process invalid connection urls', () => {
         aliases: []
     });
     expect(result).toBeUndefined();
+});
+
+test('can parse links', () => {
+    const link = '<https://api.github.com/user/12345/repos?page=2>; rel="next"';
+    const result = linkParser(link);
+    expect(result).toEqual({
+        href: 'https://api.github.com/user/12345/repos?page=2',
+        rel: 'next',
+        query: {
+            page: '2'
+        }
+    });
 });

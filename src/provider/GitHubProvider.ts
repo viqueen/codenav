@@ -1,5 +1,7 @@
-import { Input, Page, ProviderOptions, RestClient, Store } from '../main';
+import { link } from 'fs';
+import { Input, Link, Page, ProviderOptions, RestClient, Store } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
+import { linkParser } from '../util/ItermUtil';
 import { BaseProvider } from './BaseProvider';
 
 export class GitHubProvider extends BaseProvider {
@@ -31,12 +33,23 @@ export class GitHubProvider extends BaseProvider {
         options: ProviderOptions,
         query: any | undefined
     ): Promise<Page> {
-        // TODO : handle paging
+        console.log(query);
         return this.client
             ._get(`/users/${options.namespace}/repos`, query)
-            .then((response) => ({
-                data: response,
-                next: undefined
-            }));
+            .then((response) => {
+                const links = response.headers.link
+                    .split(/\s*,\s*/)
+                    .map((link: string) => linkParser(link))
+                    .filter((link: Link | undefined) => {
+                        if (link && link.rel === 'next') {
+                            return link;
+                        }
+                    });
+                const next = links.length === 1 ? links[0].query : undefined;
+                return {
+                    data: response.body,
+                    next: next
+                };
+            });
     }
 }

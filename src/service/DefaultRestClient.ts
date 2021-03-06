@@ -1,4 +1,4 @@
-import { Item, RestClient, RestClientOptions } from '../main';
+import { Item, RestClient, RestClientOptions, RestResponse } from '../main';
 import * as https from 'https';
 import * as QueryString from 'query-string';
 
@@ -13,8 +13,8 @@ export class DefaultRestClient implements RestClient {
         this.headers = options.headers || {};
     }
 
-    _get(target: string, query: any = {}): Promise<Array<Item>> {
-        return new Promise<Array<Item>>((resolve) => {
+    _get(target: string, query: any = {}): Promise<RestResponse> {
+        return new Promise<RestResponse>((resolve) => {
             const settings = {
                 path: `${target}?${QueryString.stringify(query)}`,
                 host: this.host,
@@ -31,9 +31,12 @@ export class DefaultRestClient implements RestClient {
                     buffer += chunk.toString();
                 });
                 response.on('end', () => {
-                    if (buffer !== '') {
-                        resolve(JSON.parse(buffer.toString()));
-                    }
+                    const body =
+                        buffer !== '' ? JSON.parse(buffer.toString()) : {};
+                    resolve({
+                        body: body,
+                        headers: response.headers
+                    });
                 });
             };
             const request = https.request(settings, callback);

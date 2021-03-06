@@ -68,14 +68,29 @@ interface Service {
 
 // source providers
 
+interface Link {
+    readonly rel: string;
+    readonly href: string;
+    readonly query: any;
+}
+
+interface LinkParser {
+    (link: string): Link | undefined;
+}
+
 interface RestClientOptions {
     readonly host: string;
     readonly port?: string;
     readonly headers?: any;
 }
 
+interface RestResponse {
+    readonly body: any;
+    readonly headers: any;
+}
+
 interface RestClient extends RestClientOptions {
-    _get(target: string, query: any): Promise<any>;
+    _get(target: string, query: any): Promise<RestResponse>;
 }
 
 interface ProviderOptions {

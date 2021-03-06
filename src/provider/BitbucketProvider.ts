@@ -39,6 +39,7 @@ export class BitbucketProvider extends BaseProvider {
         // TODO : handle paging
         return this.client
             ._get(`/2.0/repositories/${options.namespace}`, query)
+            .then((response) => response.body)
             .then((response) => ({
                 data: response,
                 next: undefined
