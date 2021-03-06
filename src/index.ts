@@ -102,6 +102,8 @@ commander
     .command('list')
     .description('lists registered repos')
     .option('-dl, --display-location', 'display location only', false)
+    .option('-dc, --display-connection', 'display connection only', false)
+    .option('-ds, --display-slug', 'display repo slug only', false)
     .action((opts) => {
         store
             .list((item: Item) => itemFilter(item, options()))
@@ -109,6 +111,10 @@ commander
                 items.forEach((item) => {
                     if (opts['displayLocation']) {
                         console.log(location.resolve(item));
+                    } else if (opts['displayConnection']) {
+                        console.log(item.connection);
+                    } else if (opts['displaySlug']) {
+                        console.log(item.slug);
                     } else {
                         console.log(item);
                     }
