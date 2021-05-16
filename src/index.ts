@@ -73,7 +73,11 @@ const itemFilter = (item: Item, opts: Options) => {
     );
 };
 
-commander.option('-w, --workspace <name>', 'filter by workspace', 'default');
+commander.option(
+    '-w, --workspace <name>',
+    'filter by workspace',
+    configuration.get('cnav.workspace')
+);
 commander.option('-h, --host <name>', 'filter by host');
 commander.option('-ns, --namespace <name>', 'filter by namespace');
 commander.option('-s, --slug <name>', 'filter by name/slug');

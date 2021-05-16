@@ -13,7 +13,8 @@ export class JsonFileConfiguration implements Configuration {
         this.fileConfig = path.resolve(this.directory, fileConfigName);
         if (!existsSync(this.fileConfig)) {
             const defaultConfiguration = {
-                'sources.root': path.resolve(homedir(), 'sources')
+                'sources.root': path.resolve(homedir(), 'sources'),
+                'cnav.workspace': 'default'
             };
             writeFileSync(
                 this.fileConfig,
