@@ -1,4 +1,3 @@
-import { link } from 'fs';
 import { Input, Link, Page, ProviderOptions, RestClient, Store } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
 import { linkParser } from '../util/ItermUtil';

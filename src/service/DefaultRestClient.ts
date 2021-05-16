@@ -1,4 +1,4 @@
-import { Item, RestClient, RestClientOptions, RestResponse } from '../main';
+import { RestClient, RestClientOptions, RestResponse } from '../main';
 import * as https from 'https';
 import * as QueryString from 'query-string';
 

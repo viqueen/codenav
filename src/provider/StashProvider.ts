@@ -1,20 +1,17 @@
 import {
     Input,
     Page,
-    Provider,
     ProviderOptions,
     RestClient,
     Store,
     UrlParts
 } from '../main';
-import { itemTransformer } from '../util/ItermUtil';
 import { DefaultRestClient } from '../service/DefaultRestClient';
 import { BaseProvider } from './BaseProvider';
 
 export class StashProvider extends BaseProvider {
     readonly client!: RestClient;
     readonly store!: Store;
-    readonly instance!: UrlParts;
 
     constructor(instance: UrlParts, token: string, store: Store) {
         super(

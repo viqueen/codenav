@@ -1,7 +1,6 @@
 import {
     Input,
     ItemTransformer,
-    Link,
     LinkParser,
     UrlParser,
     UrlParts
