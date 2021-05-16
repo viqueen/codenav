@@ -57,7 +57,7 @@ interface Options {
 
 interface ItemCommand {
     readonly location: ItemLocation;
-    make(item: Item): Task;
+    process(item: Item): Task;
 }
 
 interface Service {

@@ -17,7 +17,7 @@ export class ExecCommand implements ItemCommand {
         this.location = location;
     }
 
-    make(item: Item): Task {
+    process(item: Item): Task {
         const directory = this.location.resolve(item);
         return () =>
             new Promise<any>((resolve) => {

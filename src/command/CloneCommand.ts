@@ -11,7 +11,7 @@ export class CloneCommand implements ItemCommand {
         this.location = location;
     }
 
-    make(item: Item): Task {
+    process(item: Item): Task {
         const target = this.location.resolve(item);
         if (existsSync(path.resolve(target, '.git'))) {
             return () => {

@@ -13,7 +13,7 @@ export class DefaultService implements Service {
     execute(command: ItemCommand, filter: ItemFilter): void {
         this.store.list(filter).then((items) => {
             items.forEach((item) => {
-                this.executor.submit(command.make(item));
+                this.executor.submit(command.process(item));
             });
         });
     }
