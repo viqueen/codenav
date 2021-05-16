@@ -92,10 +92,11 @@ commander
         if (!item) {
             return;
         }
-        store.add(item);
-        console.log(
-            `registered on workspace: ${item.workspace} / ${item.connection}`
-        );
+        store.add(item).then(() => {
+            console.log(
+                `registered on workspace: ${item.workspace} / ${item.connection}`
+            );
+        });
     });
 
 commander
