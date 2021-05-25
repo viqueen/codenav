@@ -19,8 +19,9 @@ export class CloneCommand implements ItemCommand {
                 return Promise.resolve();
             };
         }
-        return () =>
-            simpleGit()
+        return () => {
+            console.log(`cloning ${target}`);
+            return simpleGit()
                 .clone(item.connection, target)
                 .then(() =>
                     console.log(`cloned ${item.connection} into ${target}`)
@@ -28,5 +29,6 @@ export class CloneCommand implements ItemCommand {
                 .catch((error) => {
                     console.log(error);
                 });
+        };
     }
 }
