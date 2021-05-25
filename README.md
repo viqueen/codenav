@@ -18,6 +18,7 @@ git clone git@github.com:viqueen/codenav.git
 cd codenav
 
 npm install
+npm run build:prod
 npm link
 ```
 
