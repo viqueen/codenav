@@ -1,4 +1,12 @@
-import { Input, Link, Page, ProviderOptions, RestClient, Store } from '../main';
+import {
+    Configuration,
+    Input,
+    Link,
+    Page,
+    ProviderOptions,
+    RestClient,
+    Store
+} from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
 import { linkParser } from '../util/ItermUtil';
 import { BaseProvider } from './BaseProvider';
@@ -6,14 +14,27 @@ import { BaseProvider } from './BaseProvider';
 export class GitHubProvider extends BaseProvider {
     readonly client!: RestClient;
     readonly store!: Store;
+    readonly org!: boolean;
 
-    constructor(store: Store) {
+    constructor(store: Store, configuration: Configuration, org?: boolean) {
         super(
             store,
             new DefaultRestClient({
-                host: 'api.github.com'
+                host: 'api.github.com',
+                headers:
+                    configuration.get('github.personal.token') &&
+                    configuration.get('github.username')
+                        ? {
+                              Authorization: `Basic ${Buffer.from(
+                                  configuration.get('github.username') +
+                                      ':' +
+                                      configuration.get('github.personal.token')
+                              ).toString('base64')}`
+                          }
+                        : {}
             })
         );
+        this.org = org || false;
     }
 
     _extractConnectionUrls(
@@ -32,18 +53,22 @@ export class GitHubProvider extends BaseProvider {
         options: ProviderOptions,
         query: any | undefined
     ): Promise<Page> {
-        console.log(query);
         return this.client
-            ._get(`/users/${options.namespace}/repos`, query)
+            ._get(
+                `/${this.org ? 'orgs' : 'users'}/${options.namespace}/repos`,
+                query
+            )
             .then((response) => {
-                const links = response.headers.link
-                    .split(/\s*,\s*/)
-                    .map((link: string) => linkParser(link))
-                    .filter((link: Link | undefined) => {
-                        if (link && link.rel === 'next') {
-                            return link;
-                        }
-                    });
+                const links = response.headers.links
+                    ? response.headers.link
+                          .split(/\s*,\s*/)
+                          .map((link: string) => linkParser(link))
+                          .filter((link: Link | undefined) => {
+                              if (link && link.rel === 'next') {
+                                  return link;
+                              }
+                          })
+                    : [];
                 const next = links.length === 1 ? links[0].query : undefined;
                 return {
                     data: response.body,

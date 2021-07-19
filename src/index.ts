@@ -209,7 +209,20 @@ commander
     .description('register repos from github with given namespace')
     .action((namespace) => {
         const { workspace } = commander;
-        const githubProvider = new GitHubProvider(store);
+        const githubProvider = new GitHubProvider(store, configuration);
+        githubProvider.register({
+            workspace: workspace,
+            namespace: namespace,
+            itemFilter: (item: Item) => itemFilter(item, options())
+        });
+    });
+
+commander
+    .command('github-org <namespace>')
+    .description('register repos from github with given namespace')
+    .action((namespace) => {
+        const { workspace } = commander;
+        const githubProvider = new GitHubProvider(store, configuration, true);
         githubProvider.register({
             workspace: workspace,
             namespace: namespace,
