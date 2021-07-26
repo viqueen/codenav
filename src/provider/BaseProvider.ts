@@ -19,7 +19,7 @@ export class BaseProvider implements Provider {
         this.initialQuery = initialQuery;
     }
 
-    _extractConnectionUrls(
+    _extractMetadata(
         json: any,
         workspace: string,
         namespace: string
@@ -42,7 +42,7 @@ export class BaseProvider implements Provider {
         this._sendRequest(options, query)
             .then((page) => {
                 const { data, next } = page;
-                this._extractConnectionUrls(data, workspace, namespace)
+                this._extractMetadata(data, workspace, namespace)
                     .map((input) => itemTransformer(input))
                     .forEach((item) => {
                         if (item && options.itemFilter(item)) {

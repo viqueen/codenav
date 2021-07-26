@@ -205,19 +205,34 @@ commander
     });
 
 commander
-    .command('github <namespace>')
+    .command('github')
     .description('register repos from github with given namespace')
     .option('--user <namespace>', 'with user namespace')
     .option('--org <namespace>', 'with org namespace')
+    .option('--archived', 'include archived', false)
+    .option('--forked', 'include forks', false)
     .action((env) => {
         const { workspace } = commander;
         const { user, org } = env;
+        const { archived, forked } = env;
+
+        if (!user && !org) {
+            console.log(`missing --user or --org option`);
+            return;
+        }
+
         if (user) {
             const githubUserProvider = new GitHubProvider(store, configuration);
             githubUserProvider.register({
                 workspace: workspace,
                 namespace: user,
-                itemFilter: (item: Item) => itemFilter(item, options())
+                itemFilter: (item: Item) => {
+                    return (
+                        (item.archived ? archived : true) &&
+                        (item.forked ? forked : true) &&
+                        itemFilter(item, options())
+                    );
+                }
             });
         }
         if (org) {
@@ -229,7 +244,13 @@ commander
             githubOrgProvider.register({
                 workspace: workspace,
                 namespace: org,
-                itemFilter: (item: Item) => itemFilter(item, options())
+                itemFilter: (item: Item) => {
+                    return (
+                        (archived ? item.archived || false : true) &&
+                        (forked ? item.forked || false : true) &&
+                        itemFilter(item, options())
+                    );
+                }
             });
         }
     });

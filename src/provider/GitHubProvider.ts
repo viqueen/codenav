@@ -37,7 +37,7 @@ export class GitHubProvider extends BaseProvider {
         this.org = org || false;
     }
 
-    _extractConnectionUrls(
+    _extractMetadata(
         json: any,
         workspace: string,
         namespace: string
@@ -45,7 +45,9 @@ export class GitHubProvider extends BaseProvider {
         return json.map((item: any) => ({
             connection: item['ssh_url'],
             workspace: workspace,
-            aliases: []
+            aliases: [],
+            forked: item['fork'],
+            archived: item['archived']
         }));
     }
 
@@ -59,7 +61,7 @@ export class GitHubProvider extends BaseProvider {
                 query
             )
             .then((response) => {
-                const links = response.headers.links
+                const links = response.headers.link
                     ? response.headers.link
                           .split(/\s*,\s*/)
                           .map((link: string) => linkParser(link))

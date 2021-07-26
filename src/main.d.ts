@@ -10,6 +10,8 @@ interface Item {
     readonly slug: string;
     readonly aliases: Array<string>;
     readonly workspace: string;
+    readonly forked?: boolean;
+    readonly archived?: boolean;
 }
 
 interface ItemFilter {
@@ -36,6 +38,8 @@ interface Input {
     readonly connection: string;
     readonly workspace: string;
     readonly aliases: Array<string>;
+    readonly archived?: boolean;
+    readonly forked?: boolean;
 }
 
 interface ItemTransformer {
@@ -103,7 +107,7 @@ interface Provider {
     readonly store: Store;
     readonly client: RestClient;
 
-    _extractConnectionUrls(
+    _extractMetadata(
         json: any,
         workspace: string,
         namespace: string

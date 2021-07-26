@@ -17,7 +17,7 @@ export class BitbucketProvider extends BaseProvider {
         );
     }
 
-    _extractConnectionUrls(
+    _extractMetadata(
         json: any,
         workspace: string,
         namespace: string

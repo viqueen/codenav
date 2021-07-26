@@ -37,7 +37,9 @@ const itemTransformer: ItemTransformer = (input: Input) => {
         host: host,
         slug: name,
         aliases: Array.from(aliases),
-        workspace: input.workspace
+        workspace: input.workspace,
+        forked: input.forked,
+        archived: input.archived
     };
 };
 
