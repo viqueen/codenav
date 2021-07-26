@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-import commander from 'commander';
+import { Command } from 'commander';
 import { JsonFileConfiguration } from './data/JsonFileConfiguration';
 import { homedir } from 'os';
 import path from 'path';
@@ -21,6 +21,8 @@ import { ExecCommand } from './command/ExecCommand';
 const configuration = new JsonFileConfiguration(
     path.resolve(homedir(), '.cnav')
 );
+
+const commander = new Command();
 
 commander
     .command('config')
@@ -61,7 +63,7 @@ const service = new DefaultService(store);
 const location = new DefaultItemLocation(configuration);
 
 const options = () => {
-    const { workspace, host, namespace, slug, keyword } = commander;
+    const { workspace, host, namespace, slug, keyword } = commander.opts();
     return {
         workspace,
         host,
@@ -100,7 +102,7 @@ commander
     .action((urlConnection, aliases) => {
         const input: Input = {
             connection: urlConnection,
-            workspace: commander.workspace,
+            workspace: commander.opts().workspace,
             aliases: aliases
         };
         const item = itemTransformer(input);
@@ -191,7 +193,7 @@ commander
             return;
         }
 
-        const { workspace } = commander;
+        const { workspace } = commander.opts();
         urlParser(url).then((parts) => {
             const stashProvider = new StashProvider(parts, token, store);
             stashProvider.register({
@@ -206,7 +208,7 @@ commander
     .command('bitbucket <namespace>')
     .description('register repos from bitbucket with given namespace')
     .action((namespace) => {
-        const { workspace } = commander;
+        const { workspace } = commander.opts();
         const bitbucketProvider = new BitbucketProvider(store);
         bitbucketProvider.register({
             workspace: workspace,
@@ -223,7 +225,7 @@ commander
     .option('--archived', 'include archived', false)
     .option('--forked', 'include forks', false)
     .action((env) => {
-        const { workspace } = commander;
+        const { workspace } = commander.opts();
         const { user, org } = env;
         const { archived, forked } = env;
 
