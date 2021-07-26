@@ -4,6 +4,7 @@ import commander from 'commander';
 import { JsonFileConfiguration } from './data/JsonFileConfiguration';
 import { homedir } from 'os';
 import path from 'path';
+import fs from 'fs';
 import { LevelDBStore } from './data/LevelDBStore';
 import { itemTransformer, urlParser } from './util/ItermUtil';
 import { Input, Item, Options } from './main';
@@ -41,6 +42,16 @@ commander
     .description('gets cnav configuration entry')
     .action((key) => {
         console.log(configuration.get(key));
+    });
+
+commander
+    .command('workspaces')
+    .description('list available workspaces')
+    .action(() => {
+        const sourcesRoot = configuration.get('sources.root');
+        fs.readdirSync(sourcesRoot, { withFileTypes: true })
+            .filter((entry) => entry.isDirectory())
+            .forEach((entry) => console.log(entry.name));
     });
 
 // repo handlers
