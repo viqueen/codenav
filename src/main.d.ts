@@ -30,6 +30,7 @@ interface Store {
     get(key: string): Promise<Item>;
     remove(filter: ItemFilter): Promise<Array<Item>>;
     list(filter: ItemFilter): Promise<Array<Item>>;
+    close(): Promise<void>;
 }
 
 // CLI

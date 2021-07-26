@@ -1,38 +1,46 @@
 import { LevelDBStore } from './LevelDBStore';
 import { Configuration, Item } from '../main';
 
-const configuration: Configuration = {
-    directory: process.cwd(),
-    set: () => {},
-    get: () => {
-        return '';
-    }
-};
+let configuration: Configuration;
+let store: LevelDBStore;
+let dataSupplier: (key: string) => any;
 
-const store = new LevelDBStore(configuration);
-
-const dataSupplier = (key: string) => {
-    return {
-        item: {
-            ID: key,
-            connection: 'ssh://git@github.com:viqueen/codenav.git',
-            host: 'github.com',
-            namespace: 'viqueen',
-            slug: 'codenav',
-            aliases: [],
-            workspace: 'tools'
-        },
-        filter: (item: Item) => {
-            return item.ID === key;
+beforeAll(() => {
+    configuration = {
+        directory: process.cwd(),
+        set: () => {},
+        get: () => {
+            return '';
         }
     };
-};
+    store = new LevelDBStore(configuration);
+    dataSupplier = (key: string) => {
+        return {
+            item: {
+                ID: key,
+                connection: 'ssh://git@github.com:viqueen/codenav.git',
+                host: 'github.com',
+                namespace: 'viqueen',
+                slug: 'codenav',
+                aliases: [],
+                workspace: 'tools'
+            },
+            filter: (item: Item) => {
+                return item.ID === key;
+            }
+        };
+    };
+});
 
 beforeEach(async () => {
     const deleted = await store.remove(() => true);
     expect(deleted.length).toBeGreaterThanOrEqual(0);
     const items = await store.list(() => true);
     expect(items.length).toEqual(0);
+});
+
+afterAll(async () => {
+    await store.close();
 });
 
 test('can store repo item', async () => {

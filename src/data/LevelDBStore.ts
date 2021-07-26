@@ -59,4 +59,8 @@ export class LevelDBStore implements Store {
             return items;
         });
     }
+
+    close(): Promise<void> {
+        return this.db.close();
+    }
 }

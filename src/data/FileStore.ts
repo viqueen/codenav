@@ -56,4 +56,8 @@ export class FileStore implements Store {
     remove(filter: ItemFilter): Promise<Array<Item>> {
         throw new Error('not supported');
     }
+
+    close(): Promise<void> {
+        return Promise.resolve();
+    }
 }
