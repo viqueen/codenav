@@ -207,27 +207,31 @@ commander
 commander
     .command('github <namespace>')
     .description('register repos from github with given namespace')
-    .action((namespace) => {
+    .option('--user <namespace>', 'with user namespace')
+    .option('--org <namespace>', 'with org namespace')
+    .action((env) => {
         const { workspace } = commander;
-        const githubProvider = new GitHubProvider(store, configuration);
-        githubProvider.register({
-            workspace: workspace,
-            namespace: namespace,
-            itemFilter: (item: Item) => itemFilter(item, options())
-        });
-    });
-
-commander
-    .command('github-org <namespace>')
-    .description('register repos from github with given namespace')
-    .action((namespace) => {
-        const { workspace } = commander;
-        const githubProvider = new GitHubProvider(store, configuration, true);
-        githubProvider.register({
-            workspace: workspace,
-            namespace: namespace,
-            itemFilter: (item: Item) => itemFilter(item, options())
-        });
+        const { user, org } = env;
+        if (user) {
+            const githubUserProvider = new GitHubProvider(store, configuration);
+            githubUserProvider.register({
+                workspace: workspace,
+                namespace: user,
+                itemFilter: (item: Item) => itemFilter(item, options())
+            });
+        }
+        if (org) {
+            const githubOrgProvider = new GitHubProvider(
+                store,
+                configuration,
+                true
+            );
+            githubOrgProvider.register({
+                workspace: workspace,
+                namespace: org,
+                itemFilter: (item: Item) => itemFilter(item, options())
+            });
+        }
     });
 
 commander.version(require('../package.json').version);

@@ -63,7 +63,8 @@ Commands:
   exec <executableFile> [args...]        execute script on target repos
   stash <project>                        register repos from stash for a given project
   bitbucket <namespace>                  register repos from bitbucket with given namespace
-  github <namespace>                     register repos from github with given namespace
+  github --user <namespace>              register repos from github with given user namespace
+  github --org <namespace>               register repos from github with given org namespace
   help [command]                         display help for command
 ```
 
