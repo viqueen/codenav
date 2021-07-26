@@ -1,12 +1,12 @@
 import { Configuration } from '../main';
 import { LevelDBStore } from '../data/LevelDBStore';
-import { GitHubProvider } from './GitHubProvider';
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
+import { BitbucketProvider } from './BitbucketProvider';
 
 let configuration: Configuration;
 let store: LevelDBStore;
-let userGithubProvider: GitHubProvider;
+let bitbucketProvider: BitbucketProvider;
 let configurationDirectory: string;
 
 const pause = (millis: number): Promise<any> => {
@@ -18,7 +18,7 @@ const pause = (millis: number): Promise<any> => {
 beforeAll(() => {
     configurationDirectory = path.resolve(
         process.cwd(),
-        '.test-GitHubProvider'
+        '.test-BitbucketProvider'
     );
     fs.mkdirSync(configurationDirectory);
     configuration = {
@@ -29,7 +29,7 @@ beforeAll(() => {
         }
     };
     store = new LevelDBStore(configuration);
-    userGithubProvider = new GitHubProvider(store, configuration);
+    bitbucketProvider = new BitbucketProvider(store);
 });
 
 afterAll(async () => {
@@ -38,14 +38,14 @@ afterAll(async () => {
 });
 
 test('can register repo items from viqueen', async () => {
-    await userGithubProvider.register({
+    await bitbucketProvider.register({
         workspace: 'cnav-test',
         namespace: 'viqueen',
-        itemFilter: (item) => !item.forked && !item.archived
+        itemFilter: (item) => true
     });
 
     await pause(100);
 
     const items = await store.list(() => true);
-    expect(items.length).toEqual(7);
+    expect(items.length).toEqual(1);
 });
