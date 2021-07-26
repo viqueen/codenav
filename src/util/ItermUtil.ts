@@ -8,8 +8,10 @@ import {
 import QueryString from 'query-string';
 import { URL } from 'url';
 
-const SSH_URL_PATTERN = /^(?<protocol>ssh:\/\/)?(?<user>[a-zA-Z0-9]+)@(?<host>[a-zA-Z0-9.]+(:[0-9]+)?)([\/:])(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
-const HTTPS_URL_PATTERN = /^(?<protocol>https:\/\/)(?<host>[a-zA-Z0-9.]+)\/(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
+const SSH_URL_PATTERN =
+    /^(?<protocol>ssh:\/\/)?(?<user>[a-zA-Z0-9]+)@(?<host>[a-zA-Z0-9.]+(:[0-9]+)?)([\/:])(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
+const HTTPS_URL_PATTERN =
+    /^(?<protocol>https:\/\/)(?<host>[a-zA-Z0-9.]+)\/(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
 
 const itemTransformer: ItemTransformer = (input: Input) => {
     const url = input.connection;
@@ -43,7 +45,8 @@ const itemTransformer: ItemTransformer = (input: Input) => {
     };
 };
 
-const URL_PATTERN = /^(?<protocol>http|https):\/\/(?<host>[a-zA-Z0-9.]+)(:(?<port>[0-9]+))?(?<context>\/[a-zA-Z0-9]*)?$/;
+const URL_PATTERN =
+    /^(?<protocol>http|https):\/\/(?<host>[a-zA-Z0-9.]+)(:(?<port>[0-9]+))?(?<context>\/[a-zA-Z0-9]*)?$/;
 
 const urlParser: UrlParser = (url: string) => {
     return new Promise<UrlParts>((resolve, reject) => {

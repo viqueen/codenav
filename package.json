@@ -1,6 +1,6 @@
 {
   "name": "codenav",
-  "version": "2.0.0-m10",
+  "version": "2.0.0-m11",
   "description": "code navigation",
   "bin": {
     "cnav": "./dist/index.js"
@@ -11,7 +11,8 @@
     "ci:test": "jest",
     "ci:build": "rimraf ./dist && tsc -b tsconfig.prod.json",
     "format:check": "prettier --check .",
-    "format": "prettier --check --write ."
+    "format": "prettier --check --write .",
+    "check-updates": "npm-check-updates -u"
   },
   "files": [
     "dist"
@@ -33,30 +34,26 @@
   },
   "homepage": "https://github.com/viqueen/codenav#readme",
   "devDependencies": {
-    "@types/jest": "26.0.20",
-    "@types/leveldown": "4.0.2",
-    "@types/levelup": "4.3.0",
-    "@types/lodash": "4.14.168",
-    "@types/node": "14.14.31",
-    "husky": "4.2.5",
-    "jest": "26.6.3",
-    "prettier": "2.0.5",
+    "@types/jest": "26.0.24",
+    "@types/leveldown": "4.0.3",
+    "@types/levelup": "4.3.3",
+    "@types/lodash": "4.14.171",
+    "@types/node": "16.4.3",
+    "husky": "7.0.1",
+    "jest": "27.0.6",
+    "npm-check-updates": "11.8.3",
+    "prettier": "2.3.2",
     "rimraf": "3.0.2",
-    "ts-jest": "26.5.1",
-    "typescript": "4.1.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run format:check"
-    }
+    "ts-jest": "27.0.4",
+    "typescript": "4.3.5"
   },
   "dependencies": {
-    "commander": "6.0.0",
-    "leveldown": "5.6.0",
-    "levelup": "4.4.0",
+    "commander": "8.0.0",
+    "leveldown": "6.0.0",
+    "levelup": "5.0.1",
     "lodash": "4.17.21",
-    "query-string": "6.13.6",
-    "simple-git": "2.35.2",
+    "query-string": "7.0.1",
+    "simple-git": "2.41.1",
     "task-pool-executor": "1.0.3"
   }
 }
