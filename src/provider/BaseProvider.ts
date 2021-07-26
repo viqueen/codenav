@@ -34,12 +34,12 @@ export class BaseProvider implements Provider {
         throw new Error();
     }
 
-    _handle(options: ProviderOptions, query: any) {
+    _handle(options: ProviderOptions, query: any): Promise<any> {
         if (!query) {
             throw new Error();
         }
         const { workspace, namespace } = options;
-        this._sendRequest(options, query)
+        return this._sendRequest(options, query)
             .then((page) => {
                 const { data, next } = page;
                 this._extractMetadata(data, workspace, namespace)
@@ -47,10 +47,11 @@ export class BaseProvider implements Provider {
                     .forEach((item) => {
                         if (item && options.itemFilter(item)) {
                             // noinspection JSIgnoredPromiseFromCall
-                            this.store.add(item);
-                            console.log(
-                                `registered on workspace: ${item.workspace} / ${item.connection}`
-                            );
+                            this.store.add(item).then(() => {
+                                console.log(
+                                    `registered on workspace: ${item.workspace} / ${item.connection}`
+                                );
+                            });
                         }
                     });
                 return next;
@@ -61,7 +62,7 @@ export class BaseProvider implements Provider {
             .catch(() => {});
     }
 
-    register(options: ProviderOptions): void {
-        this._handle(options, this.initialQuery);
+    register(options: ProviderOptions): Promise<any> {
+        return this._handle(options, this.initialQuery);
     }
 }

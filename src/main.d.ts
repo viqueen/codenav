@@ -114,7 +114,7 @@ interface Provider {
         namespace: string
     ): Array<Input>;
 
-    register(options: ProviderOptions): void;
+    register(options: ProviderOptions): Promise<any>;
 }
 
 // util

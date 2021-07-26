@@ -3,3 +3,5 @@ node_modules/
 .cnav-db/
 dist/
 coverage/
+
+.test-*/

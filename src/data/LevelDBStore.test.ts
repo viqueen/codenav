@@ -1,13 +1,18 @@
 import { LevelDBStore } from './LevelDBStore';
 import { Configuration, Item } from '../main';
+import path from 'path';
+import fs from 'fs';
 
 let configuration: Configuration;
 let store: LevelDBStore;
 let dataSupplier: (key: string) => any;
+let configurationDirectory: string;
 
 beforeAll(() => {
+    configurationDirectory = path.resolve(process.cwd(), '.test-LevelDBStore');
+    fs.mkdirSync(configurationDirectory);
     configuration = {
-        directory: process.cwd(),
+        directory: configurationDirectory,
         set: () => {},
         get: () => {
             return '';
@@ -41,6 +46,7 @@ beforeEach(async () => {
 
 afterAll(async () => {
     await store.close();
+    fs.rmSync(configurationDirectory, { recursive: true });
 });
 
 test('can store repo item', async () => {
