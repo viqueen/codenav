@@ -1,4 +1,4 @@
-import { itemTransformer, linkParser } from './ItermUtil';
+import { itemTransformer, linkParser, urlParser } from './ItermUtil';
 
 const sshItem = {
     ID: 'tools/viqueen/codenav',
@@ -79,4 +79,27 @@ test('can parse links', () => {
             page: '2'
         }
     });
+});
+
+test('does not parse broken links', () => {
+    const link = '<https://api.github.com/user/12345/repos?page=2>;';
+    const result = linkParser(link);
+    expect(result).toBeUndefined();
+});
+
+test('can parse urls', async () => {
+    const url = 'https://localhost:7990/bitbucket';
+    const result = await urlParser(url);
+    expect(result).toEqual({
+        protocol: 'https',
+        host: 'localhost',
+        port: '7990',
+        context: '/bitbucket'
+    });
+});
+
+test('does not parse broken urls', async () => {
+    const url = 'not-valid';
+    expect.assertions(1);
+    await expect(urlParser(url)).rejects.toBeUndefined();
 });
