@@ -47,5 +47,5 @@ test('can register repo items from viqueen', async () => {
     await pause(100);
 
     const items = await store.list(() => true);
-    expect(items.length).toEqual(7);
-});
+    expect(items.length).toBeGreaterThanOrEqual(7);
+}, 10000);
