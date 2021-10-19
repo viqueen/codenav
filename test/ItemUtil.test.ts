@@ -1,4 +1,4 @@
-import { itemTransformer, linkParser, urlParser } from './ItemUtil';
+import { itemTransformer, linkParser, urlParser } from '../src/util/ItemUtil';
 
 const sshItem = {
     ID: 'tools/viqueen/codenav',

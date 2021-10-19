@@ -1,8 +1,8 @@
-import { Configuration } from '../main';
-import { LevelDBStore } from '../data/LevelDBStore';
+import { Configuration } from '../src/main';
+import { LevelDBStore } from '../src/data/LevelDBStore';
 import path from 'path';
 import fs from 'fs';
-import { BitbucketProvider } from './BitbucketProvider';
+import { BitbucketProvider } from '../src/provider/BitbucketProvider';
 
 let configuration: Configuration;
 let store: LevelDBStore;

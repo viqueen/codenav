@@ -18,6 +18,7 @@
     "dist",
     "coverage",
     "src/**/*.test.ts",
+    "test",
     "jest.config.js"
   ]
 }

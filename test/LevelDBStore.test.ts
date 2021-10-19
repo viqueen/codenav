@@ -1,5 +1,5 @@
-import { LevelDBStore } from './LevelDBStore';
-import { Configuration, Item } from '../main';
+import { LevelDBStore } from '../src/data/LevelDBStore';
+import { Configuration, Item } from '../src/main';
 import path from 'path';
 import fs from 'fs';
 

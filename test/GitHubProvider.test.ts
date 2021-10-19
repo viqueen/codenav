@@ -1,6 +1,6 @@
-import { Configuration } from '../main';
-import { LevelDBStore } from '../data/LevelDBStore';
-import { GitHubProvider } from './GitHubProvider';
+import { Configuration } from '../src/main';
+import { LevelDBStore } from '../src/data/LevelDBStore';
+import { GitHubProvider } from '../src/provider/GitHubProvider';
 import fs from 'fs';
 import path from 'path';
 
