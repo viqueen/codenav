@@ -1,6 +1,6 @@
 import { Configuration, Input, Item, ItemFilter, Store } from '../main';
 import { readdirSync } from 'fs';
-import { itemTransformer } from '../util/ItermUtil';
+import { itemTransformer } from '../util/ItemUtil';
 
 export class FileStore implements Store {
     readonly configuration!: Configuration;

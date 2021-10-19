@@ -6,7 +6,7 @@ import {
     RestClient,
     Store
 } from '../main';
-import { itemTransformer } from '../util/ItermUtil';
+import { itemTransformer } from '../util/ItemUtil';
 
 export class BaseProvider implements Provider {
     readonly client!: RestClient;

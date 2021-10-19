@@ -6,7 +6,7 @@ import { homedir } from 'os';
 import path from 'path';
 import fs from 'fs';
 import { LevelDBStore } from './data/LevelDBStore';
-import { itemTransformer, urlParser } from './util/ItermUtil';
+import { itemTransformer, urlParser } from './util/ItemUtil';
 import { Input, Item, Options } from './main';
 import { DefaultService } from './service/DefaultService';
 import { CloneCommand } from './command/CloneCommand';

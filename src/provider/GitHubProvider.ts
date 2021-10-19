@@ -8,7 +8,7 @@ import {
     Store
 } from '../main';
 import { DefaultRestClient } from '../service/DefaultRestClient';
-import { linkParser } from '../util/ItermUtil';
+import { linkParser } from '../util/ItemUtil';
 import { BaseProvider } from './BaseProvider';
 
 export class GitHubProvider extends BaseProvider {
