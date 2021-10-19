@@ -8,12 +8,12 @@ import {
 import QueryString from 'query-string';
 import { URL } from 'url';
 
-const SSH_URL_PATTERN =
-    /^(?<protocol>ssh:\/\/)?(?<user>[a-zA-Z0-9]+)@(?<host>[a-zA-Z0-9.]+(:[0-9]+)?)([\/:])(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
-const HTTPS_URL_PATTERN =
-    /^(?<protocol>https:\/\/)(?<host>[a-zA-Z0-9.]+)\/(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
-
 const itemTransformer: ItemTransformer = (input: Input) => {
+    const SSH_URL_PATTERN =
+        /^(?<protocol>ssh:\/\/)?([a-zA-Z0-9]+)@(?<host>[a-zA-Z0-9.]+(:\d+)?)([\/:])(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
+    const HTTPS_URL_PATTERN =
+        /^(?<protocol>https:\/\/)(?<host>[a-zA-Z0-9.]+)\/(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
+
     const url = input.connection;
     const sshMatcher = url.match(SSH_URL_PATTERN);
     const matcher = sshMatcher ? sshMatcher : url.match(HTTPS_URL_PATTERN);
@@ -68,9 +68,9 @@ const urlParser: UrlParser = (url: string) => {
     });
 };
 
-const LINK_PATTERN = /^<(?<href>.*)>; rel="(?<rel>next|last)"$/;
-
 const linkParser: LinkParser = (link: string) => {
+    const LINK_PATTERN = /^<(?<href>.*)>; rel="(?<rel>next|last)"$/;
+
     const matcher = link.match(LINK_PATTERN);
 
     if (!matcher) {
