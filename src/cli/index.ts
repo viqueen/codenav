@@ -1,20 +1,20 @@
 #! /usr/bin/env node
 
 import { Command } from 'commander';
-import { JsonFileConfiguration } from './data/JsonFileConfiguration';
+import { JsonFileConfiguration } from '../data/JsonFileConfiguration';
 import { homedir } from 'os';
 import path from 'path';
 import fs from 'fs';
-import { LevelDBStore } from './data/LevelDBStore';
-import { itemTransformer, urlParser } from './util/ItemUtil';
-import { Input, Item, Options } from './main';
-import { DefaultService } from './service/DefaultService';
-import { CloneCommand } from './command/CloneCommand';
-import { StashProvider } from './provider/StashProvider';
-import { BitbucketProvider } from './provider/BitbucketProvider';
-import { GitHubProvider } from './provider/GitHubProvider';
-import { DefaultItemLocation } from './util/DefaultItemLocation';
-import { ExecCommand } from './command/ExecCommand';
+import { LevelDBStore } from '../data/LevelDBStore';
+import { itemTransformer, urlParser } from '../util/ItemUtil';
+import { Input, Item, Options } from '../main';
+import { DefaultService } from '../service/DefaultService';
+import { CloneCommand } from '../command/CloneCommand';
+import { StashProvider } from '../provider/StashProvider';
+import { BitbucketProvider } from '../provider/BitbucketProvider';
+import { GitHubProvider } from '../provider/GitHubProvider';
+import { DefaultItemLocation } from '../util/DefaultItemLocation';
+import { ExecCommand } from '../command/ExecCommand';
 
 // configuration handlers
 
@@ -268,5 +268,5 @@ commander
         }
     });
 
-commander.version(require('../package.json').version);
+commander.version(require('../../package.json').version);
 commander.parse(process.argv);
