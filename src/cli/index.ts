@@ -7,7 +7,7 @@ import path from 'path';
 import fs from 'fs';
 import { LevelDBStore } from '../data/LevelDBStore';
 import { itemTransformer, urlParser } from '../util/ItemUtil';
-import { Input, Item, Options } from '../main';
+import { Input, Item, Options, Store } from '../main';
 import { DefaultService } from '../service/DefaultService';
 import { CloneCommand } from '../command/CloneCommand';
 import { StashProvider } from '../provider/StashProvider';
@@ -148,9 +148,7 @@ commander
             .remove((item: Item) => itemFilter(item, options()))
             .then((items) => {
                 console.log('removed items:');
-                items
-                    .map((item) => item.ID)
-                    .forEach((item) => console.log(item));
+                items.forEach((item) => console.log(item.ID));
             });
     });
 
@@ -196,11 +194,15 @@ commander
         const { workspace } = commander.opts();
         urlParser(url).then((parts) => {
             const stashProvider = new StashProvider(parts, token, store);
-            stashProvider.register({
-                workspace: workspace,
-                namespace: project,
-                itemFilter: (item: Item) => itemFilter(item, options())
-            });
+            stashProvider
+                .register({
+                    workspace: workspace,
+                    namespace: project,
+                    itemFilter: (item: Item) => itemFilter(item, options())
+                })
+                .then(() => {
+                    console.log('✅ Done');
+                });
         });
     });
 
@@ -210,12 +212,41 @@ commander
     .action((namespace) => {
         const { workspace } = commander.opts();
         const bitbucketProvider = new BitbucketProvider(store);
-        bitbucketProvider.register({
-            workspace: workspace,
-            namespace: namespace,
-            itemFilter: (item: Item) => itemFilter(item, options())
-        });
+        bitbucketProvider
+            .register({
+                workspace: workspace,
+                namespace: namespace,
+                itemFilter: (item: Item) => itemFilter(item, options())
+            })
+            .then(() => {
+                console.log('✅ Done');
+            });
     });
+
+const makeGitHubProviderAndRegister = (
+    workspace: string,
+    namespace: string,
+    org: boolean,
+    archived: boolean,
+    forked: boolean
+) => {
+    const provider = new GitHubProvider(store, configuration, org);
+    provider
+        .register({
+            workspace,
+            namespace,
+            itemFilter: (item: Item) => {
+                return (
+                    (item.archived ? archived : true) &&
+                    (item.forked ? forked : true) &&
+                    itemFilter(item, options())
+                );
+            }
+        })
+        .then(() => {
+            console.log('✅ Done');
+        });
+};
 
 commander
     .command('github')
@@ -235,36 +266,22 @@ commander
         }
 
         if (user) {
-            const githubUserProvider = new GitHubProvider(store, configuration);
-            githubUserProvider.register({
-                workspace: workspace,
-                namespace: user,
-                itemFilter: (item: Item) => {
-                    return (
-                        (item.archived ? archived : true) &&
-                        (item.forked ? forked : true) &&
-                        itemFilter(item, options())
-                    );
-                }
-            });
+            makeGitHubProviderAndRegister(
+                workspace,
+                user,
+                false,
+                archived,
+                forked
+            );
         }
         if (org) {
-            const githubOrgProvider = new GitHubProvider(
-                store,
-                configuration,
-                true
+            makeGitHubProviderAndRegister(
+                workspace,
+                org,
+                true,
+                archived,
+                forked
             );
-            githubOrgProvider.register({
-                workspace: workspace,
-                namespace: org,
-                itemFilter: (item: Item) => {
-                    return (
-                        (archived ? item.archived || false : true) &&
-                        (forked ? item.forked || false : true) &&
-                        itemFilter(item, options())
-                    );
-                }
-            });
         }
     });
 
