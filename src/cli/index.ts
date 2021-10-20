@@ -7,7 +7,7 @@ import path from 'path';
 import fs from 'fs';
 import { LevelDBStore } from '../data/LevelDBStore';
 import { itemTransformer, urlParser } from '../util/ItemUtil';
-import { Input, Item, Options, Store } from '../main';
+import { Input, Item, Options } from '../main';
 import { DefaultService } from '../service/DefaultService';
 import { CloneCommand } from '../command/CloneCommand';
 import { StashProvider } from '../provider/StashProvider';
