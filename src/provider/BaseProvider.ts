@@ -59,7 +59,9 @@ export class BaseProvider implements Provider {
             .then((nextQuery) => {
                 return this._handle(options, nextQuery);
             })
-            .catch(() => {});
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     register(options: ProviderOptions): Promise<any> {
