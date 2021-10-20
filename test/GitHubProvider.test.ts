@@ -37,7 +37,7 @@ afterAll(async () => {
     fs.rmSync(configurationDirectory, { recursive: true });
 });
 
-test('can register repo items from viqueen', async () => {
+test('can register repo items from viqueen user', async () => {
     await userGithubProvider.register({
         workspace: 'cnav-test',
         namespace: 'viqueen',
@@ -48,4 +48,17 @@ test('can register repo items from viqueen', async () => {
 
     const items = await store.list(() => true);
     expect(items.length).toBeGreaterThanOrEqual(7);
+}, 10000);
+
+test('can register repo items from viqueen-org', async () => {
+    await userGithubProvider.register({
+        workspace: 'cnav-test',
+        namespace: 'viqueen-org',
+        itemFilter: (item) => !item.archived
+    });
+
+    await pause(100);
+
+    const items = await store.list(() => true);
+    expect(items.length).toBeGreaterThanOrEqual(1);
 }, 10000);
