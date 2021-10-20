@@ -10,9 +10,9 @@ import { URL } from 'url';
 
 const itemTransformer: ItemTransformer = (input: Input) => {
     const SSH_URL_PATTERN =
-        /^(?<protocol>ssh:\/\/)?([a-zA-Z0-9]+)@(?<host>[a-zA-Z0-9.]+(:\d+)?)([\/:])(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
+        /^(?<protocol>ssh:\/\/)?([a-zA-Z\d]+)@(?<host>[a-zA-Z0-9.]+(:\d+)?)([\/:])(?<namespace>[a-zA-Z\d-_]+)\/(?<name>[a-zA-Z\d-_]+)\.git$/;
     const HTTPS_URL_PATTERN =
-        /^(?<protocol>https:\/\/)(?<host>[a-zA-Z0-9.]+)\/(?<namespace>[a-zA-Z0-9-_]+)\/(?<name>[a-zA-Z0-9-_]+)\.git$/;
+        /^(?<protocol>https:\/\/)(?<host>[a-zA-Z\d.]+)\/(?<namespace>[a-zA-Z\d-_]+)\/(?<name>[a-zA-Z\d-_]+)\.git$/;
 
     const url = input.connection;
     const sshMatcher = url.match(SSH_URL_PATTERN);
@@ -45,10 +45,10 @@ const itemTransformer: ItemTransformer = (input: Input) => {
     };
 };
 
-const URL_PATTERN =
-    /^(?<protocol>http|https):\/\/(?<host>[a-zA-Z0-9.]+)(:(?<port>[0-9]+))?(?<context>\/[a-zA-Z0-9]*)?$/;
-
 const urlParser: UrlParser = (url: string) => {
+    const URL_PATTERN =
+        /^(?<protocol>http|https):\/\/(?<host>[a-zA-Z0-9.]+)(:(?<port>[0-9]+))?(?<context>\/[a-zA-Z0-9]*)?$/;
+
     return new Promise<UrlParts>((resolve, reject) => {
         const matcher = url.match(URL_PATTERN);
 
