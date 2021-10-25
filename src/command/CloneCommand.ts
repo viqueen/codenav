@@ -15,19 +15,19 @@ export class CloneCommand implements ItemCommand {
         const target = this.location.resolve(item);
         if (existsSync(path.resolve(target, '.git'))) {
             return () => {
-                console.log(`already checked out : ${target}`);
+                console.log(`⚠️ already checked out : ${target}`);
                 return Promise.resolve();
             };
         }
         return () => {
-            console.log(`cloning ${target}`);
+            console.log(`⚠️ cloning ${target}`);
             return simpleGit()
                 .clone(item.connection, target)
                 .then(() =>
-                    console.log(`cloned ${item.connection} into ${target}`)
+                    console.log(`✅ cloned ${item.connection} into ${target}`)
                 )
                 .catch((error) => {
-                    console.log(error);
+                    console.log(`⛔️`, error);
                 });
         };
     }
