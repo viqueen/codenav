@@ -54,6 +54,6 @@
     "lodash": "4.17.21",
     "query-string": "7.0.1",
     "simple-git": "2.48.0",
-    "task-pool-executor": "1.0.3"
+    "task-pool-executor": "1.1.0"
   }
 }
