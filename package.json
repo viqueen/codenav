@@ -1,6 +1,6 @@
 {
   "name": "codenav",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "code navigation",
   "bin": {
     "cnav": "./dist/cli/index.js"
@@ -38,14 +38,14 @@
     "@types/leveldown": "4.0.3",
     "@types/levelup": "4.3.3",
     "@types/lodash": "4.14.178",
-    "@types/node": "16.11.12",
+    "@types/node": "17.0.5",
     "husky": "7.0.4",
-    "jest": "27.4.4",
-    "npm-check-updates": "12.0.3",
+    "jest": "27.4.5",
+    "npm-check-updates": "12.0.5",
     "prettier": "2.5.1",
     "rimraf": "3.0.2",
-    "ts-jest": "27.1.1",
-    "typescript": "4.5.3"
+    "ts-jest": "27.1.2",
+    "typescript": "4.5.4"
   },
   "dependencies": {
     "commander": "8.3.0",
