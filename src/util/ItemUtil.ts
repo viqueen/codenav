@@ -10,9 +10,9 @@ import { URL } from 'url';
 
 const itemTransformer: ItemTransformer = (input: Input) => {
     const SSH_URL_PATTERN =
-        /^(?<protocol>ssh:\/\/)?([a-zA-Z\d]+)@(?<host>[a-zA-Z\d.]+(:\d+)?)([\/:])(?<namespace>[a-zA-Z\d-_]+)\/(?<name>[a-zA-Z\d-_]+)\.git$/;
+        /^(?<protocol>ssh:\/\/)?([a-zA-Z\d]+)@(?<host>[a-zA-Z\d.]+(:\d+)?)([\/:])(?<namespace>[a-zA-Z\d-_]+)\/(?<name>[a-zA-Z\d-_\.]+)\.git$/;
     const HTTPS_URL_PATTERN =
-        /^(?<protocol>https:\/\/)(?<host>[a-zA-Z\d.]+)\/(?<namespace>[a-zA-Z\d-_]+)\/(?<name>[a-zA-Z\d-_]+)\.git$/;
+        /^(?<protocol>https:\/\/)(?<host>[a-zA-Z\d.]+)\/(?<namespace>[a-zA-Z\d-_]+)\/(?<name>[a-zA-Z\d-_\.]+)\.git$/;
 
     const url = input.connection;
     const sshMatcher = url.match(SSH_URL_PATTERN);

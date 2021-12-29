@@ -20,6 +20,16 @@ const httpsItem = {
     workspace: 'tools'
 };
 
+const sshIemWithDots = {
+    ID: 'tools/viqueen/codenav.org',
+    connection: 'ssh://git@github.com:viqueen/codenav.org.git',
+    host: 'github.com',
+    namespace: 'viqueen',
+    slug: 'codenav.org',
+    aliases: ['codenav.org'],
+    workspace: 'tools'
+};
+
 test('can extract item details from ssh connection', () => {
     const parsedItem = itemTransformer({
         connection: sshItem.connection,
@@ -27,6 +37,15 @@ test('can extract item details from ssh connection', () => {
         aliases: []
     });
     expect(parsedItem).toEqual(sshItem);
+});
+
+test('can extract item details from ssh connection with dots in the repo slug', () => {
+    const parsedItem = itemTransformer({
+        connection: sshIemWithDots.connection,
+        workspace: sshIemWithDots.workspace,
+        aliases: []
+    });
+    expect(parsedItem).toEqual(sshIemWithDots);
 });
 
 test('can extract item details from https connection', () => {
