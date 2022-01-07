@@ -37,7 +37,6 @@ export class BitbucketProvider extends BaseProvider {
         options: ProviderOptions,
         query: any | undefined
     ): Promise<Page> {
-        console.log(query);
         return this.client
             ._get(`/2.0/repositories/${options.namespace}`, query)
             .then((response) => response.body)
