@@ -33,6 +33,10 @@ export class JsonFileConfiguration implements Configuration {
         writeFileSync(this.fileConfig, JSON.stringify(data));
     }
 
+    getStoreDirectory(): string {
+        return this.get('cnav.store') || this.directory;
+    }
+
     config(): any {
         return JSON.parse(readFileSync(this.fileConfig).toString());
     }
