@@ -1,6 +1,6 @@
 {
   "name": "codenav",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "code navigation",
   "bin": {
     "cnav": "./dist/cli/index.js"
@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc --watch",
     "test": "jest --watchAll",
+    "dev": "ts-node src/cli/index.ts",
     "ci:test": "jest",
     "ci:build": "rimraf ./dist && tsc -b tsconfig.prod.json",
     "format:check": "prettier --check .",
@@ -45,6 +46,7 @@
     "prettier": "2.5.1",
     "rimraf": "3.0.2",
     "ts-jest": "27.1.2",
+    "ts-node": "^10.4.0",
     "typescript": "4.5.4"
   },
   "dependencies": {

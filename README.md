@@ -3,26 +3,54 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=viqueen_codenav&metric=alert_status)](https://sonarcloud.io/dashboard?id=viqueen_codenav)
 [![Known Vulnerabilities](https://snyk.io/test/github/viqueen/codenav/badge.svg?targetFile=package.json)](https://snyk.io/test/github/viqueen/codenav?targetFile=package.json)
 
-### install it
+---
 
-#### from stable
+I wrote this tool to help me structure and work with the various code-bases I contribute to regardless of which organisations
+they belong to. This is extremely handy for someone involved in open source development.
+
+It brings in the concept of workspaces, and also persists that into a configuration that can be shared across multiple
+computers. This is amazing as I often work from either my personal or my company’s laptop, and also I like to spoil myself with new laptops every now and then … with this tool I can simply get setup with `cnav clone` and it gets me all the code !
+
+It supports registering repositories from different source control providers GitHub, Bitbucket (cloud and DC) …
+with more providers to come … whenever I have to contribute to a repo hosted over there
+
+The main feature I wrote this tool for is the `cnav exec` command, it lets you run a script across multiple
+repositories; this is excellent when you’re working on platform/infrastructure, and you’re generally in need
+to apply updates in bulk.
+
+---
+
+## install it
+
+### from stable
+
+- through **npm**
 
 ```bash
 npm install -g codenav
 ```
 
-#### from source
+- through **Homebrew**
+
+```bash
+brew tap viqueen/codenav
+brew install codenav
+```
+
+### from source
 
 ```bash
 git clone git@github.com:viqueen/codenav.git
 cd codenav
 
-npm install
+npm ci
 npm run ci:build
 npm link
 ```
 
-### configure it
+---
+
+## configure it
 
 - view default config
 
@@ -34,9 +62,14 @@ cnav config
 
 ```bash
 cnav set-config sources.root <path/to/sources/root>
+cnav set-config cnav.workspace <default>
+cnav set-config github.username <username>
+cnav set-config github.personal.token <token>
 ```
 
-### use it
+---
+
+## use it
 
 - available commands
 
@@ -80,10 +113,11 @@ cnav bitbucket <username|org>
 cnav stash <projectKey>
 ```
 
-- register repos from github
+- register repos from GitHub
 
 ```
-cnav github <username|org>
+cnav github --user <username>
+cnav github --org <organisation>
 ```
 
 - list repos
