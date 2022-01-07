@@ -36,24 +36,28 @@ export class BaseProvider implements Provider {
 
     _handle(options: ProviderOptions, query: any): Promise<any> {
         if (!query) {
-            throw new Error();
+            return Promise.resolve();
         }
         const { workspace, namespace } = options;
         return this._sendRequest(options, query)
-            .then((page) => {
+            .then(async (page) => {
                 const { data, next } = page;
-                this._extractMetadata(data, workspace, namespace)
-                    .map((input) => itemTransformer(input))
-                    .forEach((item) => {
-                        if (item && options.itemFilter(item)) {
-                            // noinspection JSIgnoredPromiseFromCall
-                            this.store.add(item).then(() => {
-                                console.log(
-                                    `registered on workspace: ${item.workspace} / ${item.connection}`
-                                );
-                            });
-                        }
-                    });
+                await Promise.all(
+                    this._extractMetadata(data, workspace, namespace)
+                        .map((input) => itemTransformer(input))
+                        .map((item) => {
+                            if (item && options.itemFilter(item)) {
+                                return this.store.add(item).then(() => {
+                                    console.log(
+                                        `registered on workspace: ${item.workspace} / ${item.connection}`
+                                    );
+                                });
+                            } else {
+                                return Promise.resolve('filtered-out');
+                            }
+                        })
+                );
+
                 return next;
             })
             .then((nextQuery) => {

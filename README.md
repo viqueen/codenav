@@ -179,3 +179,10 @@ cnav clone -h <github.com|bitbucket.org>
 cnav clone -ns <username|org> -h <github.com|bitbucket.org>
 cnav clone -w <workspace>
 ```
+
+---
+
+## develop it
+
+- run and watch tests with `npm test`
+- run the cli with local changes using `./cnavdev <options> <commands>`
