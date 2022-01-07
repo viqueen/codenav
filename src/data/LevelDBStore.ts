@@ -11,10 +11,9 @@ export class LevelDBStore implements Store {
 
     constructor(configuration: Configuration) {
         this.configuration = configuration;
-        const target = path.resolve(
-            configuration.getStoreDirectory(),
-            `.cnav-db`
-        );
+        const storeDirectory =
+            configuration.get('cnav.store') || configuration.directory;
+        const target = path.resolve(storeDirectory, `.cnav-db`);
         this.db = LevelUp(LevelDOWN(target));
     }
 

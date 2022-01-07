@@ -22,7 +22,6 @@ interface Configuration {
     readonly directory: string;
     set(key: string, value: any): void;
     get(key: string): any;
-    getStoreDirectory(): string;
 }
 
 interface Store {
