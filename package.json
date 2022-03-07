@@ -55,7 +55,7 @@
     "levelup": "5.1.1",
     "lodash": "4.17.21",
     "query-string": "7.1.0",
-    "simple-git": "3.1.1",
+    "simple-git": "3.2.4",
     "task-pool-executor": "1.1.0"
   }
 }
