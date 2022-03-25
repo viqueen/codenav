@@ -7,6 +7,7 @@ import path from 'path';
 let configuration: Configuration;
 let store: LevelDBStore;
 let userGithubProvider: GitHubProvider;
+let orgGithubProvider: GitHubProvider;
 let configurationDirectory: string;
 
 const pause = (millis: number): Promise<any> => {
@@ -31,6 +32,7 @@ describe('GitHubProvider', () => {
         };
         store = new LevelDBStore(configuration);
         userGithubProvider = new GitHubProvider(store, configuration);
+        orgGithubProvider = new GitHubProvider(store, configuration, true);
     });
 
     afterAll(async () => {
@@ -51,18 +53,16 @@ describe('GitHubProvider', () => {
         expect(items.length).toBeGreaterThanOrEqual(7);
     }, 10000);
 
-    test('can register repo items from viqueen-org', async () => {
-        await userGithubProvider.register({
+    test('can register repo items from labset org', async () => {
+        await orgGithubProvider.register({
             workspace: 'cnav-test',
-            namespace: 'viqueen-org',
+            namespace: 'labset',
             itemFilter: (item) => !item.archived
         });
 
         await pause(100);
 
-        const items = await store.list(
-            (item) => item.namespace === 'viqueen-org'
-        );
+        const items = await store.list((item) => item.namespace === 'labset');
         expect(items.length).toBeGreaterThanOrEqual(1);
     }, 5000);
 });
