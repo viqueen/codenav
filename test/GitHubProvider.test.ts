@@ -7,6 +7,7 @@ import path from 'path';
 let configuration: Configuration;
 let store: LevelDBStore;
 let userGithubProvider: GitHubProvider;
+let orgGithubProvider: GitHubProvider;
 let configurationDirectory: string;
 
 const pause = (millis: number): Promise<any> => {
@@ -15,50 +16,53 @@ const pause = (millis: number): Promise<any> => {
     });
 };
 
-beforeAll(() => {
-    configurationDirectory = path.resolve(
-        process.cwd(),
-        '.test-GitHubProvider'
-    );
-    fs.mkdirSync(configurationDirectory);
-    configuration = {
-        directory: configurationDirectory,
-        set: () => {},
-        get: () => {
-            return undefined;
-        }
-    };
-    store = new LevelDBStore(configuration);
-    userGithubProvider = new GitHubProvider(store, configuration);
-});
-
-afterAll(async () => {
-    await store.close();
-    fs.rmSync(configurationDirectory, { recursive: true });
-});
-
-test('can register repo items from viqueen user', async () => {
-    await userGithubProvider.register({
-        workspace: 'cnav-test',
-        namespace: 'viqueen',
-        itemFilter: (item) => !item.forked && !item.archived
+describe('GitHubProvider', () => {
+    beforeAll(() => {
+        configurationDirectory = path.resolve(
+            process.cwd(),
+            '.test-GitHubProvider'
+        );
+        fs.mkdirSync(configurationDirectory);
+        configuration = {
+            directory: configurationDirectory,
+            set: () => {},
+            get: () => {
+                return undefined;
+            }
+        };
+        store = new LevelDBStore(configuration);
+        userGithubProvider = new GitHubProvider(store, configuration);
+        orgGithubProvider = new GitHubProvider(store, configuration, true);
     });
 
-    await pause(100);
-
-    const items = await store.list(() => true);
-    expect(items.length).toBeGreaterThanOrEqual(7);
-}, 10000);
-
-test('can register repo items from viqueen-org', async () => {
-    await userGithubProvider.register({
-        workspace: 'cnav-test',
-        namespace: 'viqueen-org',
-        itemFilter: (item) => !item.archived
+    afterAll(async () => {
+        await store.close();
+        fs.rmSync(configurationDirectory, { recursive: true });
     });
 
-    await pause(100);
+    test('can register repo items from viqueen user', async () => {
+        await userGithubProvider.register({
+            workspace: 'cnav-test',
+            namespace: 'viqueen',
+            itemFilter: (item) => !item.forked && !item.archived
+        });
 
-    const items = await store.list(() => true);
-    expect(items.length).toBeGreaterThanOrEqual(1);
-}, 10000);
+        await pause(100);
+
+        const items = await store.list(() => true);
+        expect(items.length).toBeGreaterThanOrEqual(7);
+    }, 10000);
+
+    test('can register repo items from labset org', async () => {
+        await orgGithubProvider.register({
+            workspace: 'cnav-test',
+            namespace: 'labset',
+            itemFilter: (item) => !item.archived
+        });
+
+        await pause(100);
+
+        const items = await store.list((item) => item.namespace === 'labset');
+        expect(items.length).toBeGreaterThanOrEqual(1);
+    }, 5000);
+});
